@@ -132,6 +132,13 @@ ul.task-list li input[type="checkbox"] {
 <section id="intro" class="level1">
 <h1>Intro</h1>
 <p>Short description or lorem ipsum here.</p>
+<p>makeing some edits</p>
+<ol type="1">
+<li>edit .qmd</li>
+<li>quarto render 3 publish: quarto publish gh-pages</li>
+<li>refresh site</li>
+</ol>
+<p>you can skip 3, you can render as you build to see it locally.</p>
 <ul>
 <li>Back to <a href="index.html">Home</a></li>
 </ul>
@@ -232,7 +239,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/stg4-texas-24hr-ga\.github\.io\/stg4-texas-24hr-ga\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

@@ -4,7 +4,7 @@
     "href": "intro.html",
     "title": "Intro",
     "section": "",
-    "text": "Intro\nShort description or lorem ipsum here.\n\nBack to Home"
+    "text": "Intro\nShort description or lorem ipsum here.\nmakeing some edits\n\nedit .qmd\nquarto render 3 publish: quarto publish gh-pages\nrefresh site\n\nyou can skip 3, you can render as you build to see it locally.\n\nBack to Home"
   },
   {
     "objectID": "index.html",
