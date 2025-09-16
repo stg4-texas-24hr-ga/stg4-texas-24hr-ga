@@ -6,4 +6,13 @@ title: "Intro"
 
 Short description or lorem ipsum here.
 
+makeing some edits
+
+1. edit .qmd
+2. quarto render
+3  publish: quarto publish gh-pages
+4. refresh site
+
+you can skip 3, you can render as you build to see it locally.
+
 - Back to [Home](index.html)
