@@ -10,8 +10,10 @@ makeing some edits
 
 1. edit .qmd on main commit and push
 2. quarto renderin your editor
-3.  then in your editor hit quarto publish gh-pages
+3. then in your editor hit quarto publish gh-pages
 4. refresh site
+
+can you hear me?
 
 you can not do 3, you can render as you build to see it locally.
 
