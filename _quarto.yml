@@ -1,0 +1,16 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "STG4 Texas"
+  navbar:
+    left:
+      - text: Home
+        href: index.qmd
+      - text: Intro
+        href: intro.qmd
+
+format:
+  html:
+    theme: cosmo

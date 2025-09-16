@@ -1,0 +1,9 @@
+---
+title: "Home"
+---
+
+# STG4 — 24-Hour Texas Radar
+
+Minimal starter page.
+
+- Go to the [Intro](intro.html).
