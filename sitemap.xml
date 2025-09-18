@@ -1,43 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/introHOLD.html</loc>
-    <lastmod>2025-09-16T18:02:19.181Z</lastmod>
-  </url>
-  <url>
     <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/index.html</loc>
-    <lastmod>2025-09-16T20:59:59.742Z</lastmod>
+    <lastmod>2025-09-18T20:04:29.636Z</lastmod>
   </url>
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/rendering.html</loc>
-    <lastmod>2025-09-16T19:58:38.146Z</lastmod>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/stg4-product.html</loc>
+    <lastmod>2025-09-18T19:47:55.695Z</lastmod>
   </url>
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/customizing.html</loc>
-    <lastmod>2025-09-16T19:58:38.130Z</lastmod>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/frontend.html</loc>
+    <lastmod>2025-09-18T19:04:31.364Z</lastmod>
   </url>
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/add-content.html</loc>
-    <lastmod>2025-09-16T19:58:38.114Z</lastmod>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/automation.html</loc>
+    <lastmod>2025-09-18T19:04:31.364Z</lastmod>
   </url>
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/acknowledgements.html</loc>
-    <lastmod>2025-09-16T19:58:38.101Z</lastmod>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/about.html</loc>
+    <lastmod>2025-09-18T19:04:31.364Z</lastmod>
   </url>
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/code.html</loc>
-    <lastmod>2025-09-16T19:58:38.114Z</lastmod>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/containers.html</loc>
+    <lastmod>2025-09-18T19:41:29.535Z</lastmod>
   </url>
   <url>
     <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/publishing.html</loc>
-    <lastmod>2025-09-16T19:58:38.130Z</lastmod>
+    <lastmod>2025-09-18T19:04:31.376Z</lastmod>
   </url>
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/rmarkdown.html</loc>
-    <lastmod>2025-09-16T19:58:38.162Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/indexHOLD.html</loc>
-    <lastmod>2025-09-16T17:35:37.212Z</lastmod>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/tech_stack.html</loc>
+    <lastmod>2025-09-18T19:37:58.436Z</lastmod>
   </url>
 </urlset>
