@@ -5,8 +5,8 @@ website:
   page-navigation: true
   title: "NOAA quarto simple" 
   site-url: "https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/" 
-  repo-url: "https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-ga"
-  repo-actions: [edit, source, issue]
+  # repo-url: "https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-ga"
+  # repo-actions: [edit, source, issue]
   favicon: images/favicon.ico
   
   page-footer:
@@ -15,17 +15,18 @@ website:
   
   sidebar:
     background: "#D9E3E4"
-    logo: "https://raw.githubusercontent.com/nmfs-opensci/assets/main/logo/nmfs-opensci-logo3.png"
+    logo: img/conus.gif
+    # logo: "https://raw.githubusercontent.com/nmfs-opensci/assets/main/logo/nmfs-opensci-logo3.png"
     favicon: images/favicon.ico
     pinned: true
     align: center
     tools: 
       - icon: globe
-        href: https://nmfs-opensci.github.io
-        text: "NMFS Open Science"
+        href: https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/
+        text: "Stage IV NOMADS"
       - icon: github
-        href: https://github.com/nmfs-opensci
-        text: "NMFS OpenSci"
+        href: https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-ga
+        text: "Stage IV repo"
 
     style: "docked"
     search: true
@@ -33,18 +34,18 @@ website:
     contents:
       - href: index.qmd
         text: Home
-      - href: content/add-content.qmd
-        text: Add content
-      - href: content/customizing.qmd
-        text: Customizing
-      - href: content/rendering.qmd
-        text: Rendering
-      - href: content/rmarkdown.Rmd
-        text: R Markdown files
-      - href: content/code.qmd
-        text: Code in your files
-      - href: content/acknowledgements.qmd
-        text: Acknowledgements
+      - href: content/stg4-product.qmd
+        text: Stage IV precipitation
+      - href: content/tech_stack.qmd
+        text: Tech stack
+      - href: content/containers.qmd
+        text: Docker images
+      - href: content/automation.qmd
+        text: Automation
+      - href: content/frontend.qmd
+        text: Viewer
+      - href: content/about.qmd
+        text: About
 
 format:
   html:
@@ -54,6 +55,9 @@ format:
     code-copy: true
     code-overflow: wrap
     toc: true
+    grid:
+      body-width: 1400px   # try 1200–1600px
+      margin-width: 0px
 
 
 filters:

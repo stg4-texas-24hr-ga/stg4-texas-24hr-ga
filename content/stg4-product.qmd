@@ -1,0 +1,24 @@
+---
+title: Stage IV Precipitation 
+---
+
+## Overview
+
+The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II. 
+
+Real-time Stage IV fields appear within a couple of hours after the accumulation window and are progressively “filled in” as additional RFCs publish; hourly fields are typically finalized 12–18 hours later, and 6-hour/24-hour mosaics by late the following day. For retrospective analyses, the reprocessed 24-hour Stage IV is generally the most accurate choice. 
+
+Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and, via NOAA Water, as NetCDF and GeoTIFF for CONUS/Alaska/Puerto Rico, which simplifies ingestion into GIS and scientific workflows. 
+
+While the product provides near-national coverage at consistent resolution, users should remain mindful of known QPE limitations—e.g., radar beam blockage, bright-band contamination, convective undercatch, and sparse gauges in complex terrain—which can introduce regional biases that propagate into the mosaic. Peer-reviewed assessments document these characteristics and support best-practice choices (e.g., favoring the reprocessed daily field for post-event totals). 
+American Meteorological Society Journals
+
+Practically, if you need reliable daily totals for historical flood summaries or water-supply studies, use the reprocessed 24-hour Stage IV; for near-real-time dashboards and alerting, the hourly stream is appropriate but should be treated as provisional until RFC finalization. Data access is available via NOMADS and NOAA Water directories, with numerous third-party mirrors and APIs (e.g., IEM) for convenience. 
+
+## Where to download
+
+## Additional reading
+
+https://github.com/nmfs-opensci/NOAA-quarto-simple?utm_source=chatgpt.com
+
+* Add the files to `_quarto.yml`

@@ -1,14 +1,17 @@
 ---
-title: Rendering
+title: Images and Containers
 ---
 
-The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the `gh-pages` branch.
+Containers is where the magic sauce lies.  Can't say enough good things about docker in a month of lunches.
 
-But when you are developing your content, you will want to render it locally. 
+## Scrape image
 
-## Step 1. Make sure you have a recent RStudio
 
-Have you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto.
+## Wgrib2 image
+
+
+## paquet files and s3 storage
+
 
 ## Step 2. Clone and create RStudio project
 

@@ -1,0 +1,21 @@
+---
+title: The stack
+---
+
+## Workflow overview
+
+I keep everything in a single GitHub repo—Dockerfiles, R scripts, and the workflow YAML. GitHub Actions is the scheduler and glue: a nightly cron (plus a manual trigger) launches a three-step, containerized pipeline. Step 1 is scrape: a lightweight Docker image pulls the latest NCEP Stage IV GRIB2 files from NOMADS, drops them and a ready-to-run shell script into a shared volume/workspace, and records the timestamp/digest so runs are idempotent. Step 2 is degrib: I spin up a container that contains wgrib2 and simply execute the script produced in step 1. That dumps the GRIB2 into tidy, delimited text (or binary) with fields like time, grib_id (HRAP bin), and precip. Step 3 is parq-s3: an R-based Docker image (arrow + dplyr + aws.s3) ingests the dump, standardizes column types, and writes partitioned Parquet to AWS S3 with keys like s3://bucket/stg4/ymd=YYYY-MM-DD/…. Partitions (year/month/day) make append-only updates safe and keep queries fast. AWS credentials are injected into the job via GitHub Secrets as environment variables; nothing sensitive is baked into images.
+
+For mining the parquet, I use Arrow’s S3FileSystem to read datasets lazily straight from S3: open_dataset("s3://bucket/stg4") |> filter(time >= …) |> group_by(hrap_id) |> summarize(...). Most analysis is in R with dplyr, which Arrow translates into efficient scans and column pruning. I keep small, pre-aggregated artifacts (e.g., basin/day totals) in S3 as Parquet to accelerate the UI.
+
+The front end is a Shiny app deployed to Posit Connect Cloud. It reads directly from S3 at runtime (no local copies), applies filters (date range, basin, thresholds), and renders maps/plots (ggplot2 + sf). Because the backend is columnar/parquet and partitioned, responses stay snappy even on large time windows. Deploys are automated: a Connect API token lets Actions redeploy the app on successful nightly runs, so the site reflects fresh data each morning. Net result: GitHub manages source and orchestration, Docker guarantees reproducibility, wgrib2 handles the meteorology-specific conversion, S3 provides durable and cheap storage, Arrow/dplyr power analysis, and Posit Connect publishes a clean, always-current front end.
+
+## Github repos
+
+Looking at other people's Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.
+
+* [Quarto gallery](https://quarto.org/docs/gallery/)
+* [nmfs-openscapes](https://nmfs-openscapes.github.io/)
+* [Fay lab manual](https://thefaylab.github.io/lab-manual/)
+* [quarto-titlepages](https://nmfs-opensci.github.io/quarto_titlepages/) Note the link to edit is broken. Go to repo and look in `documentation` directory.
+

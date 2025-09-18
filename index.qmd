@@ -1,10 +1,10 @@
 ---
-title: "Radar Precipitation across the Edwards Aquifer"
-subtitle: "A guide to automated Stage IV processing"
+title: "Automated Radar Rainfall Mapping"
+subtitle: "A guide to automating Stage IV QPE processing and mapping"
 page-layout: full
 ---
 
-This is a guide that documents the development of automated Stage 4 radar precipitation processing across the Edwards Aquifer Region.  Daily rainfall maps  are published at approximately 9:15 AM here - [Edwards Aquifer rainfall](https://0198a52d-8079-4ff0-9716-5f6e6c21fb79.share.connect.posit.cloud/).
+This is a guide that documents the development of an automated radar precipitation processing system using the Stage IV QPE product from NCEP.  The geographic area used in this guide is the Edwards Aquifer recharge zone located in south-central Texas.  Rainfall maps and basin averaged volume calculations are published at approximately 9:15 AM Central here - [Edwards Aquifer rainfall](https://0198a52d-8079-4ff0-9716-5f6e6c21fb79.share.connect.posit.cloud/).
 
 ![](img/rainfall_map.png){width=100% fig-align="center"}
 
