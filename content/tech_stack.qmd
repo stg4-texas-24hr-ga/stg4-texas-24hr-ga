@@ -1,8 +1,79 @@
 ---
-title: The stack
+title: How it works
 ---
+docker
+parquet
+actions
 
-## Workflow overview
+
+
+## Workflow overview - High Level
+
+1. 24 hour radar file drops on NOMADS at 12:55 UTC.  
+2. GitHub Actions is triggered with a chron job to start a series of docker containers
+3. Container 1 - scrapes the NOMADS site for the recently dropped .24hr Stg4 file
+4. Container 2 - takes the GRIB2 Stg4 file and dumps txt
+5. Container 5 - organizes, clips to AOI, and writes .parquet files to AWS S3
+6. Container orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions
+7. Daily rainfall mapped with an R Shiny app through connect.posit.cloud
+8. Map is updated daily through an empty github commit orchestrated with Github Actions
+
+## The Details
+
+### Delivery of Stage IV data
+
+Stage IV data are available in near real-time on NOMADS at :55 past the hour. StageIV data are available hourly, 6-hr, and 24-hr.  The 6 and 24 hour files are simply summed one hour files. For example, hourly rainfall ending 2:00 (representing 1:00-2:00) are available at 2:55.  Twenty-four hour data are available from 12:00 - 12:00 UTC (available at 12:55 UTC).  Data for the last 14 days are kept on NOMADS after which they are cycled off. The real-time NOMADS site is available at: https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/.  Note there are CONUS, pr (Puerto Rico), and ak (Alaska) files.  
+
+An additional rerun at 30h after valid time (18:55Z) is available to supplement 24-hr mosaics if RFCs need to update their QPEs or make changes.  Personal communication with the WGRFC indicates that this is done very infrequently.
+
+The archived data were kept for years (decade?) at https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=21.093.  As of summer 2025, the data were moved to https://rda.ucar.edu/datasets/d507005/dataaccess/.
+
+In this manual, we are concerned with automating the 24-hr Stage IV rainfall product across Texas.  However, these methods can be altered to work with hourly rainfall anywhere in the lower 48, Alaska or Puerto Rico.   
+
+### GRIB2  data format
+
+Stage IV data are stored in GRIB2 binary format.  GRIB (GRIdded Binary) is a WMO standard file format for gridded meteorological data. It stores fields (e.g., temperature, precipitation) as self-contained messages with metadata (grid, units, time, level) and compressed binary arrays for efficiency. Two versions exist: GRIB1 and GRIB2 (more flexible templates, better compression). Widely used for NWP model outputs and analyses; supports multiple projections, time steps, and packing methods. Tools like wgrib2 read/convert it. NOAA maintains a github page with the lastest grib conversion tool wgrib2.exe https://github.com/NOAA-EMC/wgrib2/releases.
+
+Stage IV data were previously contained in GRIB1 format until July 2020.  There are significant differences in the processing workflows between GRIB 1 and 2.  I don't intend to write about those in this manual.
+
+### Container Orchestration
+
+Container orchestration and Github Action workflows are located in the following repo:
+
+[Container Orchestration](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
+
+The workflow for processing the StageIV data are contained in 3 individual containers described below.  The containers are managed by the docker-compose.yml which describes when to spin up each container, how to manage storage, environments etc.  The docker-compose.yml is stored in the root folder of the github repo shown above.  The docker-compose.yml gets triggered each day via Github Actions - described later.  Each of the individual container images are stored on the docker hub repository at: https://hub.docker.com/repositories/cfurl. These should all be public. 
+
+### Individual Containers
+
+The Dockerfile, code, and explicit Powershell prompts to create the Docker Image and load onto Docker Hub are contained in the following repo: 
+
+[Docker Images-Containers](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-docker)
+
+Below is a brief explanation of what each container does.  
+
+#### Container 1 - Scraper
+
+This code takes the current system date and time, visits the appropriate NOMADS url based off of date and time, downloads the 24hr GRIB2 conus file at that url, writes a shell script that is used in the next container to inject prompts to wgrib2.exe, and stores both the shell script and the actual GRIB2 file in a shared storage volume (controlled through docker-compose.yml) that all three containers are linked to.  
+
+#### Container 2 - DeGRIB your file
+
+This code simply executes the wgrib2.exe application and takes the data from the binary format and dumps as text.  This works in this case since the only thing wrapped in this GRIB2 file is stage4 rainfall.  In many meteorological GRIBs there are many variables.  The .sh shell file written in container one contain the instructions that are given to the wgrib2.exe applicatoin.  This is controlled through docker-compose.yml, namely: "command: "wgrib2_commands.sh"". The text output which is a bunch of lat/lons and rain values are stored in the same shared volume as the output files from Container 1.  
+
+#### Container 3 - Write a parquet file to an S3 bucket
+
+This docker container connects to your "stg4-texas-24hr" AWS S3 bucket, tidy's the GRIB2 csv output, clips to area of interest (Texas), and then writes .parquet files that are partitioned by (year, month, day).  A note, you would probably have to partition by hour if you do this hourly, because you can't append a .parquet file to existing data because of how it is written on the disk.  Your partitions have to be separate when you are doing this in an automated fashion.
+
+### Github Actions
+
+GitHub Actions is a CI/CD platform integrated into GitHub. It runs workflows defined in YAML to build, test, and deploy code on events like pushes, pull requests, or schedules. Jobs run on hosted runners or self-hosted machines, support matrices, secrets, caching, and reusable actions, enabling reliable pipelines across repositories globally.
+
+[Github Actions](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
+
+
+
+
+
 
 I keep everything in a single GitHub repo—Dockerfiles, R scripts, and the workflow YAML. GitHub Actions is the scheduler and glue: a nightly cron (plus a manual trigger) launches a three-step, containerized pipeline. Step 1 is scrape: a lightweight Docker image pulls the latest NCEP Stage IV GRIB2 files from NOMADS, drops them and a ready-to-run shell script into a shared volume/workspace, and records the timestamp/digest so runs are idempotent. Step 2 is degrib: I spin up a container that contains wgrib2 and simply execute the script produced in step 1. That dumps the GRIB2 into tidy, delimited text (or binary) with fields like time, grib_id (HRAP bin), and precip. Step 3 is parq-s3: an R-based Docker image (arrow + dplyr + aws.s3) ingests the dump, standardizes column types, and writes partitioned Parquet to AWS S3 with keys like s3://bucket/stg4/ymd=YYYY-MM-DD/…. Partitions (year/month/day) make append-only updates safe and keep queries fast. AWS credentials are injected into the job via GitHub Secrets as environment variables; nothing sensitive is baked into images.
 
