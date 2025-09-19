@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/index.html</loc>
-    <lastmod>2025-09-18T20:04:29.636Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/stg4-product.html</loc>
-    <lastmod>2025-09-18T19:47:55.695Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/frontend.html</loc>
-    <lastmod>2025-09-18T19:04:31.364Z</lastmod>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/about.html</loc>
+    <lastmod>2025-09-19T17:20:06.105Z</lastmod>
   </url>
   <url>
     <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/automation.html</loc>
-    <lastmod>2025-09-18T19:04:31.364Z</lastmod>
-  </url>
-  <url>
-    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/about.html</loc>
-    <lastmod>2025-09-18T19:04:31.364Z</lastmod>
+    <lastmod>2025-09-19T17:20:08.204Z</lastmod>
   </url>
   <url>
     <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/containers.html</loc>
-    <lastmod>2025-09-18T19:41:29.535Z</lastmod>
+    <lastmod>2025-09-19T17:20:08.770Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/frontend.html</loc>
+    <lastmod>2025-09-19T17:20:09.312Z</lastmod>
   </url>
   <url>
     <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/publishing.html</loc>
-    <lastmod>2025-09-18T19:04:31.376Z</lastmod>
+    <lastmod>2025-09-19T17:20:09.963Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/stg4-product.html</loc>
+    <lastmod>2025-09-19T17:20:10.524Z</lastmod>
   </url>
   <url>
     <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/content/tech_stack.html</loc>
-    <lastmod>2025-09-18T19:37:58.436Z</lastmod>
+    <lastmod>2025-09-19T17:20:11.313Z</lastmod>
+  </url>
+  <url>
+    <loc>https://stg4-texas-24hr-ga.github.io/stg4-texas-24hr-ga/index.html</loc>
+    <lastmod>2025-09-19T17:20:11.855Z</lastmod>
   </url>
 </urlset>

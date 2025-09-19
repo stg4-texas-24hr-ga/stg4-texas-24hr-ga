@@ -1,183 +1,94 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Automated Radar Rainfall Mapping",
-    "section": "",
-    "text": "This is a guide that documents the development of an automated radar precipitation processing system using the Stage IV QPE product from NCEP. The geographic area used in this guide is the Edwards Aquifer recharge zone located in south-central Texas. Rainfall maps and basin averaged volume calculations are published at approximately 9:15 AM Central here - Edwards Aquifer rainfall.",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "content/stg4-product.html",
-    "href": "content/stg4-product.html",
-    "title": "Stage IV Precipitation",
-    "section": "",
-    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.\nReal-time Stage IV fields appear within a couple of hours after the accumulation window and are progressively “filled in” as additional RFCs publish; hourly fields are typically finalized 12–18 hours later, and 6-hour/24-hour mosaics by late the following day. For retrospective analyses, the reprocessed 24-hour Stage IV is generally the most accurate choice.\nOperationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and, via NOAA Water, as NetCDF and GeoTIFF for CONUS/Alaska/Puerto Rico, which simplifies ingestion into GIS and scientific workflows.\nWhile the product provides near-national coverage at consistent resolution, users should remain mindful of known QPE limitations—e.g., radar beam blockage, bright-band contamination, convective undercatch, and sparse gauges in complex terrain—which can introduce regional biases that propagate into the mosaic. Peer-reviewed assessments document these characteristics and support best-practice choices (e.g., favoring the reprocessed daily field for post-event totals). American Meteorological Society Journals\nPractically, if you need reliable daily totals for historical flood summaries or water-supply studies, use the reprocessed 24-hour Stage IV; for near-real-time dashboards and alerting, the hourly stream is appropriate but should be treated as provisional until RFC finalization. Data access is available via NOMADS and NOAA Water directories, with numerous third-party mirrors and APIs (e.g., IEM) for convenience.",
-    "crumbs": [
-      "Stage IV precipitation"
-    ]
-  },
-  {
-    "objectID": "content/stg4-product.html#overview",
-    "href": "content/stg4-product.html#overview",
-    "title": "Stage IV Precipitation",
-    "section": "",
-    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.\nReal-time Stage IV fields appear within a couple of hours after the accumulation window and are progressively “filled in” as additional RFCs publish; hourly fields are typically finalized 12–18 hours later, and 6-hour/24-hour mosaics by late the following day. For retrospective analyses, the reprocessed 24-hour Stage IV is generally the most accurate choice.\nOperationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and, via NOAA Water, as NetCDF and GeoTIFF for CONUS/Alaska/Puerto Rico, which simplifies ingestion into GIS and scientific workflows.\nWhile the product provides near-national coverage at consistent resolution, users should remain mindful of known QPE limitations—e.g., radar beam blockage, bright-band contamination, convective undercatch, and sparse gauges in complex terrain—which can introduce regional biases that propagate into the mosaic. Peer-reviewed assessments document these characteristics and support best-practice choices (e.g., favoring the reprocessed daily field for post-event totals). American Meteorological Society Journals\nPractically, if you need reliable daily totals for historical flood summaries or water-supply studies, use the reprocessed 24-hour Stage IV; for near-real-time dashboards and alerting, the hourly stream is appropriate but should be treated as provisional until RFC finalization. Data access is available via NOMADS and NOAA Water directories, with numerous third-party mirrors and APIs (e.g., IEM) for convenience.",
-    "crumbs": [
-      "Stage IV precipitation"
-    ]
-  },
-  {
-    "objectID": "content/stg4-product.html#where-to-download",
-    "href": "content/stg4-product.html#where-to-download",
-    "title": "Stage IV Precipitation",
-    "section": "Where to download",
-    "text": "Where to download",
-    "crumbs": [
-      "Stage IV precipitation"
-    ]
-  },
-  {
-    "objectID": "content/stg4-product.html#additional-reading",
-    "href": "content/stg4-product.html#additional-reading",
-    "title": "Stage IV Precipitation",
-    "section": "Additional reading",
-    "text": "Additional reading\nhttps://github.com/nmfs-opensci/NOAA-quarto-simple?utm_source=chatgpt.com\n\nAdd the files to _quarto.yml",
-    "crumbs": [
-      "Stage IV precipitation"
-    ]
-  },
-  {
-    "objectID": "content/frontend.html",
-    "href": "content/frontend.html",
-    "title": "Acknowledgments",
-    "section": "",
-    "text": "This repo and GitHub Action was based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland.",
-    "crumbs": [
-      "Viewer"
-    ]
-  },
-  {
-    "objectID": "content/automation.html",
-    "href": "content/automation.html",
-    "title": "Rendering with Code",
-    "section": "",
-    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326",
-    "crumbs": [
-      "Automation"
-    ]
-  },
-  {
-    "objectID": "content/automation.html#modify-the-github-action",
-    "href": "content/automation.html#modify-the-github-action",
-    "title": "Rendering with Code",
-    "section": "Modify the GitHub Action",
-    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it.",
-    "crumbs": [
-      "Automation"
-    ]
-  },
-  {
-    "objectID": "content/automation.html#render-locally-and-publish-to-gh-pages-branch",
-    "href": "content/automation.html#render-locally-and-publish-to-gh-pages-branch",
-    "title": "Rendering with Code",
-    "section": "Render locally and publish to gh-pages branch",
-    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages",
-    "crumbs": [
-      "Automation"
-    ]
-  },
-  {
     "objectID": "content/about.html",
     "href": "content/about.html",
     "title": "Rendering with Code",
     "section": "",
-    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326",
-    "crumbs": [
-      "About"
-    ]
+    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
   },
   {
     "objectID": "content/about.html#modify-the-github-action",
     "href": "content/about.html#modify-the-github-action",
     "title": "Rendering with Code",
     "section": "Modify the GitHub Action",
-    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it.",
-    "crumbs": [
-      "About"
-    ]
+    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
   },
   {
     "objectID": "content/about.html#render-locally-and-publish-to-gh-pages-branch",
     "href": "content/about.html#render-locally-and-publish-to-gh-pages-branch",
     "title": "Rendering with Code",
     "section": "Render locally and publish to gh-pages branch",
-    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages",
-    "crumbs": [
-      "About"
-    ]
+    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
+  },
+  {
+    "objectID": "content/automation.html",
+    "href": "content/automation.html",
+    "title": "Rendering with Code",
+    "section": "",
+    "text": "You can have code (R, Python or Julia) in your qmd file. You will need to have these installed on your local computer, but presumably you do already if you are adding code to your qmd files.\nx &lt;- c(5, 15, 25, 35, 45, 55)\ny &lt;- c(5, 20, 14, 32, 22, 38)\nlm(x ~ y)\n\n\nCall:\nlm(formula = x ~ y)\n\nCoefficients:\n(Intercept)            y  \n      1.056        1.326"
+  },
+  {
+    "objectID": "content/automation.html#modify-the-github-action",
+    "href": "content/automation.html#modify-the-github-action",
+    "title": "Rendering with Code",
+    "section": "Modify the GitHub Action",
+    "text": "Modify the GitHub Action\nYou will need to change the GitHub Action in .github/workflows to install these and any needed packages in order for GitHub to be able to render your webpage. The GitHub Action install R since I used that in code.qmd. If you use Python or Julia instead, then you will need to update the GitHub Action to install those.\nIf getting the GitHub Action to work is too much hassle (and that definitely happens), you can alway render locally and publish to the gh-pages branch. If you do this, make sure to delete or rename the GitHub Action to something like\nrender-and-publish.old_yml\nso GitHub does not keep trying to run it. Nothing bad will happen if you don’t do this, but if you are not using the action (because it keeps failing), then you don’t need GitHub to run it."
+  },
+  {
+    "objectID": "content/automation.html#render-locally-and-publish-to-gh-pages-branch",
+    "href": "content/automation.html#render-locally-and-publish-to-gh-pages-branch",
+    "title": "Rendering with Code",
+    "section": "Render locally and publish to gh-pages branch",
+    "text": "Render locally and publish to gh-pages branch\nTo render locally and push up to the gh-pages branch, open a terminal window and then cd to the directory with the Quarto project. Type this in the terminal:\nquarto render gh-pages"
   },
   {
     "objectID": "content/containers.html",
     "href": "content/containers.html",
     "title": "Images and Containers",
     "section": "",
-    "text": "Containers is where the magic sauce lies. Can’t say enough good things about docker in a month of lunches.",
-    "crumbs": [
-      "Docker images"
-    ]
+    "text": "Containers is where the magic sauce lies. Can’t say enough good things about docker in a month of lunches."
   },
   {
     "objectID": "content/containers.html#scrape-image",
     "href": "content/containers.html#scrape-image",
     "title": "Images and Containers",
     "section": "Scrape image",
-    "text": "Scrape image",
-    "crumbs": [
-      "Docker images"
-    ]
+    "text": "Scrape image"
   },
   {
     "objectID": "content/containers.html#wgrib2-image",
     "href": "content/containers.html#wgrib2-image",
     "title": "Images and Containers",
     "section": "Wgrib2 image",
-    "text": "Wgrib2 image",
-    "crumbs": [
-      "Docker images"
-    ]
+    "text": "Wgrib2 image"
   },
   {
     "objectID": "content/containers.html#paquet-files-and-s3-storage",
     "href": "content/containers.html#paquet-files-and-s3-storage",
     "title": "Images and Containers",
     "section": "paquet files and s3 storage",
-    "text": "paquet files and s3 storage",
-    "crumbs": [
-      "Docker images"
-    ]
+    "text": "paquet files and s3 storage"
   },
   {
     "objectID": "content/containers.html#step-2.-clone-and-create-rstudio-project",
     "href": "content/containers.html#step-2.-clone-and-create-rstudio-project",
     "title": "Images and Containers",
     "section": "Step 2. Clone and create RStudio project",
-    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up.",
-    "crumbs": [
-      "Docker images"
-    ]
+    "text": "Step 2. Clone and create RStudio project\nFirst, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up."
   },
   {
     "objectID": "content/containers.html#step-3.-render-within-rstudio",
     "href": "content/containers.html#step-3.-render-within-rstudio",
     "title": "Images and Containers",
     "section": "Step 3. Render within RStudio",
-    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”.",
-    "crumbs": [
-      "Docker images"
-    ]
+    "text": "Step 3. Render within RStudio\nRStudio will recognize that this is a Quarto project by the presence of the _quarto.yml file and will see the “Build” tab. Click the “Render website” button to render to the _site folder.\nPreviewing: You can either click index.html in the _site folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”."
+  },
+  {
+    "objectID": "content/frontend.html",
+    "href": "content/frontend.html",
+    "title": "Acknowledgments",
+    "section": "",
+    "text": "This repo and GitHub Action was based on the tutorial by Openscapes quarto-website-tutorial by Julia Lowndes and Stefanie Butland."
   },
   {
     "objectID": "content/publishing.html",
@@ -208,33 +119,66 @@
     "text": "Don’t like using gh-pages?\nIn some cases, you don’t want your website on the gh-pages branch. For example, if you are creating releases and you want the website pages archived in that release, then you won’t want your website pages on the gh-pages branch.\nHere are the changes you need to make if you to avoid gh-pages branch.\n\nAt the top of _quarto.yml add the following:\n\nproject: \n  type: website\n  output-dir: docs\n\nOn GitHub under Settings &gt; Pages set pages to be made from the main branch and the docs directory.\nMake sure docs is not listed in .gitignore\nPublish the site the first time locally using quarto publish from the terminal\nChange the GitHub Action because you can’t use quarto publish gh-pages. You’ll need to push to the main branch yourself (in the GitHub Action)\n\non:\n  push:\n    branches: main\n\nname: Render and Publish\n\njobs:\n  build-deploy:\n    runs-on: ubuntu-latest\n    env:\n      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}\n\n    steps:\n      - name: Check out repository\n        uses: actions/checkout@v2 \n        \n      - name: Set up R (needed for Rmd)\n        uses: r-lib/actions/setup-r@v2\n\n      - name: Install packages (needed for Rmd)\n        run: Rscript -e 'install.packages(c(\"rmarkdown\", \"knitr\", \"jsonlite\"))'\n\n      - name: Set up Quarto\n        uses: quarto-dev/quarto-actions/setup@v2\n        with:\n          # To install LaTeX to build PDF book \n          # tinytex: true \n          # uncomment below and fill to pin a version\n          # version: 0.9.600\n      \n      - name: Render Quarto Project\n        uses: quarto-dev/quarto-actions/render@v2\n        with:\n          to: html\n\n      - name: Set up Git\n        run: |\n          git config --local user.email \"actions@github.com\"\n          git config --local user.name \"GitHub Actions\"\n\n      - name: Commit all changes and push\n        run: |\n          git add -A && git commit -m 'Build site' || echo \"No changes to commit\"\n          git push origin || echo \"No changes to commit\""
   },
   {
-    "objectID": "content/tech_stack.html",
-    "href": "content/tech_stack.html",
-    "title": "The stack",
+    "objectID": "content/stg4-product.html",
+    "href": "content/stg4-product.html",
+    "title": "Stage IV Precipitation",
     "section": "",
-    "text": "I keep everything in a single GitHub repo—Dockerfiles, R scripts, and the workflow YAML. GitHub Actions is the scheduler and glue: a nightly cron (plus a manual trigger) launches a three-step, containerized pipeline. Step 1 is scrape: a lightweight Docker image pulls the latest NCEP Stage IV GRIB2 files from NOMADS, drops them and a ready-to-run shell script into a shared volume/workspace, and records the timestamp/digest so runs are idempotent. Step 2 is degrib: I spin up a container that contains wgrib2 and simply execute the script produced in step 1. That dumps the GRIB2 into tidy, delimited text (or binary) with fields like time, grib_id (HRAP bin), and precip. Step 3 is parq-s3: an R-based Docker image (arrow + dplyr + aws.s3) ingests the dump, standardizes column types, and writes partitioned Parquet to AWS S3 with keys like s3://bucket/stg4/ymd=YYYY-MM-DD/…. Partitions (year/month/day) make append-only updates safe and keep queries fast. AWS credentials are injected into the job via GitHub Secrets as environment variables; nothing sensitive is baked into images.\nFor mining the parquet, I use Arrow’s S3FileSystem to read datasets lazily straight from S3: open_dataset(“s3://bucket/stg4”) |&gt; filter(time &gt;= …) |&gt; group_by(hrap_id) |&gt; summarize(…). Most analysis is in R with dplyr, which Arrow translates into efficient scans and column pruning. I keep small, pre-aggregated artifacts (e.g., basin/day totals) in S3 as Parquet to accelerate the UI.\nThe front end is a Shiny app deployed to Posit Connect Cloud. It reads directly from S3 at runtime (no local copies), applies filters (date range, basin, thresholds), and renders maps/plots (ggplot2 + sf). Because the backend is columnar/parquet and partitioned, responses stay snappy even on large time windows. Deploys are automated: a Connect API token lets Actions redeploy the app on successful nightly runs, so the site reflects fresh data each morning. Net result: GitHub manages source and orchestration, Docker guarantees reproducibility, wgrib2 handles the meteorology-specific conversion, S3 provides durable and cheap storage, Arrow/dplyr power analysis, and Posit Connect publishes a clean, always-current front end.",
-    "crumbs": [
-      "Tech stack"
-    ]
+    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.\nReal-time Stage IV fields appear within a couple of hours after the accumulation window and are progressively “filled in” as additional RFCs publish; hourly fields are typically finalized 12–18 hours later, and 6-hour/24-hour mosaics by late the following day. For retrospective analyses, the reprocessed 24-hour Stage IV is generally the most accurate choice.\nOperationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and, via NOAA Water, as NetCDF and GeoTIFF for CONUS/Alaska/Puerto Rico, which simplifies ingestion into GIS and scientific workflows.\nWhile the product provides near-national coverage at consistent resolution, users should remain mindful of known QPE limitations—e.g., radar beam blockage, bright-band contamination, convective undercatch, and sparse gauges in complex terrain—which can introduce regional biases that propagate into the mosaic. Peer-reviewed assessments document these characteristics and support best-practice choices (e.g., favoring the reprocessed daily field for post-event totals). American Meteorological Society Journals\nPractically, if you need reliable daily totals for historical flood summaries or water-supply studies, use the reprocessed 24-hour Stage IV; for near-real-time dashboards and alerting, the hourly stream is appropriate but should be treated as provisional until RFC finalization. Data access is available via NOMADS and NOAA Water directories, with numerous third-party mirrors and APIs (e.g., IEM) for convenience."
   },
   {
-    "objectID": "content/tech_stack.html#workflow-overview",
-    "href": "content/tech_stack.html#workflow-overview",
-    "title": "The stack",
+    "objectID": "content/stg4-product.html#overview",
+    "href": "content/stg4-product.html#overview",
+    "title": "Stage IV Precipitation",
     "section": "",
-    "text": "I keep everything in a single GitHub repo—Dockerfiles, R scripts, and the workflow YAML. GitHub Actions is the scheduler and glue: a nightly cron (plus a manual trigger) launches a three-step, containerized pipeline. Step 1 is scrape: a lightweight Docker image pulls the latest NCEP Stage IV GRIB2 files from NOMADS, drops them and a ready-to-run shell script into a shared volume/workspace, and records the timestamp/digest so runs are idempotent. Step 2 is degrib: I spin up a container that contains wgrib2 and simply execute the script produced in step 1. That dumps the GRIB2 into tidy, delimited text (or binary) with fields like time, grib_id (HRAP bin), and precip. Step 3 is parq-s3: an R-based Docker image (arrow + dplyr + aws.s3) ingests the dump, standardizes column types, and writes partitioned Parquet to AWS S3 with keys like s3://bucket/stg4/ymd=YYYY-MM-DD/…. Partitions (year/month/day) make append-only updates safe and keep queries fast. AWS credentials are injected into the job via GitHub Secrets as environment variables; nothing sensitive is baked into images.\nFor mining the parquet, I use Arrow’s S3FileSystem to read datasets lazily straight from S3: open_dataset(“s3://bucket/stg4”) |&gt; filter(time &gt;= …) |&gt; group_by(hrap_id) |&gt; summarize(…). Most analysis is in R with dplyr, which Arrow translates into efficient scans and column pruning. I keep small, pre-aggregated artifacts (e.g., basin/day totals) in S3 as Parquet to accelerate the UI.\nThe front end is a Shiny app deployed to Posit Connect Cloud. It reads directly from S3 at runtime (no local copies), applies filters (date range, basin, thresholds), and renders maps/plots (ggplot2 + sf). Because the backend is columnar/parquet and partitioned, responses stay snappy even on large time windows. Deploys are automated: a Connect API token lets Actions redeploy the app on successful nightly runs, so the site reflects fresh data each morning. Net result: GitHub manages source and orchestration, Docker guarantees reproducibility, wgrib2 handles the meteorology-specific conversion, S3 provides durable and cheap storage, Arrow/dplyr power analysis, and Posit Connect publishes a clean, always-current front end.",
-    "crumbs": [
-      "Tech stack"
-    ]
+    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.\nReal-time Stage IV fields appear within a couple of hours after the accumulation window and are progressively “filled in” as additional RFCs publish; hourly fields are typically finalized 12–18 hours later, and 6-hour/24-hour mosaics by late the following day. For retrospective analyses, the reprocessed 24-hour Stage IV is generally the most accurate choice.\nOperationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and, via NOAA Water, as NetCDF and GeoTIFF for CONUS/Alaska/Puerto Rico, which simplifies ingestion into GIS and scientific workflows.\nWhile the product provides near-national coverage at consistent resolution, users should remain mindful of known QPE limitations—e.g., radar beam blockage, bright-band contamination, convective undercatch, and sparse gauges in complex terrain—which can introduce regional biases that propagate into the mosaic. Peer-reviewed assessments document these characteristics and support best-practice choices (e.g., favoring the reprocessed daily field for post-event totals). American Meteorological Society Journals\nPractically, if you need reliable daily totals for historical flood summaries or water-supply studies, use the reprocessed 24-hour Stage IV; for near-real-time dashboards and alerting, the hourly stream is appropriate but should be treated as provisional until RFC finalization. Data access is available via NOMADS and NOAA Water directories, with numerous third-party mirrors and APIs (e.g., IEM) for convenience."
+  },
+  {
+    "objectID": "content/stg4-product.html#where-to-download",
+    "href": "content/stg4-product.html#where-to-download",
+    "title": "Stage IV Precipitation",
+    "section": "Where to download",
+    "text": "Where to download"
+  },
+  {
+    "objectID": "content/stg4-product.html#additional-reading",
+    "href": "content/stg4-product.html#additional-reading",
+    "title": "Stage IV Precipitation",
+    "section": "Additional reading",
+    "text": "Additional reading\nhttps://github.com/nmfs-opensci/NOAA-quarto-simple?utm_source=chatgpt.com\n\nAdd the files to _quarto.yml"
+  },
+  {
+    "objectID": "content/tech_stack.html",
+    "href": "content/tech_stack.html",
+    "title": "How it works",
+    "section": "",
+    "text": "docker parquet actions"
+  },
+  {
+    "objectID": "content/tech_stack.html#workflow-overview---high-level",
+    "href": "content/tech_stack.html#workflow-overview---high-level",
+    "title": "How it works",
+    "section": "Workflow overview - High Level",
+    "text": "Workflow overview - High Level\n\n24 hour radar file drops on NOMADS at 12:55 UTC.\n\nGitHub Actions is triggered with a chron job to start a series of docker containers\nContainer 1 - scrapes the NOMADS site for the recently dropped .24hr Stg4 file\nContainer 2 - takes the GRIB2 Stg4 file and dumps txt\nContainer 5 - organizes, clips to AOI, and writes .parquet files to AWS S3\nContainer orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions\nDaily rainfall mapped with an R Shiny app through connect.posit.cloud\nMap is updated daily through an empty github commit orchestrated with Github Actions"
+  },
+  {
+    "objectID": "content/tech_stack.html#the-details",
+    "href": "content/tech_stack.html#the-details",
+    "title": "How it works",
+    "section": "The Details",
+    "text": "The Details\n\nDelivery of Stage IV data\nStage IV data are available in near real-time on NOMADS at :55 past the hour. StageIV data are available hourly, 6-hr, and 24-hr. The 6 and 24 hour files are simply summed one hour files. For example, hourly rainfall ending 2:00 (representing 1:00-2:00) are available at 2:55. Twenty-four hour data are available from 12:00 - 12:00 UTC (available at 12:55 UTC). Data for the last 14 days are kept on NOMADS after which they are cycled off. The real-time NOMADS site is available at: https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/. Note there are CONUS, pr (Puerto Rico), and ak (Alaska) files.\nAn additional rerun at 30h after valid time (18:55Z) is available to supplement 24-hr mosaics if RFCs need to update their QPEs or make changes. Personal communication with the WGRFC indicates that this is done very infrequently.\nThe archived data were kept for years (decade?) at https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=21.093. As of summer 2025, the data were moved to https://rda.ucar.edu/datasets/d507005/dataaccess/.\nIn this manual, we are concerned with automating the 24-hr Stage IV rainfall product across Texas. However, these methods can be altered to work with hourly rainfall anywhere in the lower 48, Alaska or Puerto Rico.\n\n\nGRIB2 data format\nStage IV data are stored in GRIB2 binary format. GRIB (GRIdded Binary) is a WMO standard file format for gridded meteorological data. It stores fields (e.g., temperature, precipitation) as self-contained messages with metadata (grid, units, time, level) and compressed binary arrays for efficiency. Two versions exist: GRIB1 and GRIB2 (more flexible templates, better compression). Widely used for NWP model outputs and analyses; supports multiple projections, time steps, and packing methods. Tools like wgrib2 read/convert it. NOAA maintains a github page with the lastest grib conversion tool wgrib2.exe https://github.com/NOAA-EMC/wgrib2/releases.\nStage IV data were previously contained in GRIB1 format until July 2020. There are significant differences in the processing workflows between GRIB 1 and 2. I don’t intend to write about those in this manual.\n\n\nContainer Orchestration\nContainer orchestration and Github Action workflows are located in the following repo:\nContainer Orchestration\nThe workflow for processing the StageIV data are contained in 3 individual containers described below. The containers are managed by the docker-compose.yml which describes when to spin up each container, how to manage storage, environments etc. The docker-compose.yml is stored in the root folder of the github repo shown above. The docker-compose.yml gets triggered each day via Github Actions - described later. Each of the individual container images are stored on the docker hub repository at: https://hub.docker.com/repositories/cfurl. These should all be public.\n\n\nIndividual Containers\nThe Dockerfile, code, and explicit Powershell prompts to create the Docker Image and load onto Docker Hub are contained in the following repo:\nDocker Images-Containers\nBelow is a brief explanation of what each container does.\n\nContainer 1 - Scraper\nThis code takes the current system date and time, visits the appropriate NOMADS url based off of date and time, downloads the 24hr GRIB2 conus file at that url, writes a shell script that is used in the next container to inject prompts to wgrib2.exe, and stores both the shell script and the actual GRIB2 file in a shared storage volume (controlled through docker-compose.yml) that all three containers are linked to.\n\n\nContainer 2 - DeGRIB your file\nThis code simply executes the wgrib2.exe application and takes the data from the binary format and dumps as text. This works in this case since the only thing wrapped in this GRIB2 file is stage4 rainfall. In many meteorological GRIBs there are many variables. The .sh shell file written in container one contain the instructions that are given to the wgrib2.exe applicatoin. This is controlled through docker-compose.yml, namely: “command:”wgrib2_commands.sh”“. The text output which is a bunch of lat/lons and rain values are stored in the same shared volume as the output files from Container 1.\n\n\nContainer 3 - Write a parquet file to an S3 bucket\nThis docker container connects to your “stg4-texas-24hr” AWS S3 bucket, tidy’s the GRIB2 csv output, clips to area of interest (Texas), and then writes .parquet files that are partitioned by (year, month, day). A note, you would probably have to partition by hour if you do this hourly, because you can’t append a .parquet file to existing data because of how it is written on the disk. Your partitions have to be separate when you are doing this in an automated fashion.\n\n\n\nGithub Actions\nGitHub Actions is a CI/CD platform integrated into GitHub. It runs workflows defined in YAML to build, test, and deploy code on events like pushes, pull requests, or schedules. Jobs run on hosted runners or self-hosted machines, support matrices, secrets, caching, and reusable actions, enabling reliable pipelines across repositories globally.\nGithub Actions\nI keep everything in a single GitHub repo—Dockerfiles, R scripts, and the workflow YAML. GitHub Actions is the scheduler and glue: a nightly cron (plus a manual trigger) launches a three-step, containerized pipeline. Step 1 is scrape: a lightweight Docker image pulls the latest NCEP Stage IV GRIB2 files from NOMADS, drops them and a ready-to-run shell script into a shared volume/workspace, and records the timestamp/digest so runs are idempotent. Step 2 is degrib: I spin up a container that contains wgrib2 and simply execute the script produced in step 1. That dumps the GRIB2 into tidy, delimited text (or binary) with fields like time, grib_id (HRAP bin), and precip. Step 3 is parq-s3: an R-based Docker image (arrow + dplyr + aws.s3) ingests the dump, standardizes column types, and writes partitioned Parquet to AWS S3 with keys like s3://bucket/stg4/ymd=YYYY-MM-DD/…. Partitions (year/month/day) make append-only updates safe and keep queries fast. AWS credentials are injected into the job via GitHub Secrets as environment variables; nothing sensitive is baked into images.\nFor mining the parquet, I use Arrow’s S3FileSystem to read datasets lazily straight from S3: open_dataset(“s3://bucket/stg4”) |&gt; filter(time &gt;= …) |&gt; group_by(hrap_id) |&gt; summarize(…). Most analysis is in R with dplyr, which Arrow translates into efficient scans and column pruning. I keep small, pre-aggregated artifacts (e.g., basin/day totals) in S3 as Parquet to accelerate the UI.\nThe front end is a Shiny app deployed to Posit Connect Cloud. It reads directly from S3 at runtime (no local copies), applies filters (date range, basin, thresholds), and renders maps/plots (ggplot2 + sf). Because the backend is columnar/parquet and partitioned, responses stay snappy even on large time windows. Deploys are automated: a Connect API token lets Actions redeploy the app on successful nightly runs, so the site reflects fresh data each morning. Net result: GitHub manages source and orchestration, Docker guarantees reproducibility, wgrib2 handles the meteorology-specific conversion, S3 provides durable and cheap storage, Arrow/dplyr power analysis, and Posit Connect publishes a clean, always-current front end."
   },
   {
     "objectID": "content/tech_stack.html#github-repos",
     "href": "content/tech_stack.html#github-repos",
-    "title": "The stack",
+    "title": "How it works",
     "section": "Github repos",
-    "text": "Github repos\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory.",
-    "crumbs": [
-      "Tech stack"
-    ]
+    "text": "Github repos\nLooking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.\n\nQuarto gallery\nnmfs-openscapes\nFay lab manual\nquarto-titlepages Note the link to edit is broken. Go to repo and look in documentation directory."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Automated Radar Rainfall Mapping",
+    "section": "",
+    "text": "This is a guide that documents the development of an automated radar precipitation processing system using the Stage IV QPE product from NCEP. The geographic area used in this guide is the Edwards Aquifer recharge zone located in south-central Texas. Rainfall maps and basin averaged volume calculations are published at approximately 9:15 AM Central here - Edwards Aquifer rainfall."
   }
 ]
