@@ -90,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../img/conus.gif" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../img/mapR_logo_white.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
       <div class="sidebar-tools-main tools-wide">
     <a href="https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/" title="Stage IV NOMADS" class="quarto-navigation-tool px-1" aria-label="Stage IV NOMADS"><i class="bi bi-globe"></i></a>
@@ -157,11 +157,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#scrape-image" id="toc-scrape-image" class="nav-link active" data-scroll-target="#scrape-image">Scrape image</a></li>
-  <li><a href="#wgrib2-image" id="toc-wgrib2-image" class="nav-link" data-scroll-target="#wgrib2-image">Wgrib2 image</a></li>
-  <li><a href="#paquet-files-and-s3-storage" id="toc-paquet-files-and-s3-storage" class="nav-link" data-scroll-target="#paquet-files-and-s3-storage">paquet files and s3 storage</a></li>
-  <li><a href="#step-2.-clone-and-create-rstudio-project" id="toc-step-2.-clone-and-create-rstudio-project" class="nav-link" data-scroll-target="#step-2.-clone-and-create-rstudio-project">Step 2. Clone and create RStudio project</a></li>
-  <li><a href="#step-3.-render-within-rstudio" id="toc-step-3.-render-within-rstudio" class="nav-link" data-scroll-target="#step-3.-render-within-rstudio">Step 3. Render within RStudio</a></li>
+  <li><a href="#the-details" id="toc-the-details" class="nav-link active" data-scroll-target="#the-details">The Details</a>
+  <ul class="collapse">
+  <li><a href="#delivery-of-stage-iv-data" id="toc-delivery-of-stage-iv-data" class="nav-link" data-scroll-target="#delivery-of-stage-iv-data">Delivery of Stage IV data</a></li>
+  <li><a href="#grib2-data-format" id="toc-grib2-data-format" class="nav-link" data-scroll-target="#grib2-data-format">GRIB2 data format</a></li>
+  <li><a href="#container-orchestration" id="toc-container-orchestration" class="nav-link" data-scroll-target="#container-orchestration">Container Orchestration</a></li>
+  <li><a href="#individual-containers" id="toc-individual-containers" class="nav-link" data-scroll-target="#individual-containers">Individual Containers</a></li>
+  <li><a href="#github-actions" id="toc-github-actions" class="nav-link" data-scroll-target="#github-actions">Github Actions</a></li>
+  </ul></li>
+  <li><a href="#github-repos" id="toc-github-repos" class="nav-link" data-scroll-target="#github-repos">Github repos</a></li>
   </ul>
 </nav>
     </div>
@@ -185,24 +189,62 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Containers is where the magic sauce lies. Can’t say enough good things about docker in a month of lunches.</p>
-<section id="scrape-image" class="level2">
-<h2 class="anchored" data-anchor-id="scrape-image">Scrape image</h2>
+<section id="the-details" class="level2">
+<h2 class="anchored" data-anchor-id="the-details">The Details</h2>
+<section id="delivery-of-stage-iv-data" class="level3">
+<h3 class="anchored" data-anchor-id="delivery-of-stage-iv-data">Delivery of Stage IV data</h3>
+<p>Stage IV data are available in near real-time on NOMADS at :55 past the hour. StageIV data are available hourly, 6-hr, and 24-hr. The 6 and 24 hour files are simply summed one hour files. For example, hourly rainfall ending 2:00 (representing 1:00-2:00) are available at 2:55. Twenty-four hour data are available from 12:00 - 12:00 UTC (available at 12:55 UTC). Data for the last 14 days are kept on NOMADS after which they are cycled off. The real-time NOMADS site is available at: https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/. Note there are CONUS, pr (Puerto Rico), and ak (Alaska) files.</p>
+<p>An additional rerun at 30h after valid time (18:55Z) is available to supplement 24-hr mosaics if RFCs need to update their QPEs or make changes. Personal communication with the WGRFC indicates that this is done very infrequently.</p>
+<p>The archived data were kept for years (decade?) at https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=21.093. As of summer 2025, the data were moved to https://rda.ucar.edu/datasets/d507005/dataaccess/.</p>
+<p>In this manual, we are concerned with automating the 24-hr Stage IV rainfall product across Texas. However, these methods can be altered to work with hourly rainfall anywhere in the lower 48, Alaska or Puerto Rico.</p>
 </section>
-<section id="wgrib2-image" class="level2">
-<h2 class="anchored" data-anchor-id="wgrib2-image">Wgrib2 image</h2>
+<section id="grib2-data-format" class="level3">
+<h3 class="anchored" data-anchor-id="grib2-data-format">GRIB2 data format</h3>
+<p>Stage IV data are stored in GRIB2 binary format. GRIB (GRIdded Binary) is a WMO standard file format for gridded meteorological data. It stores fields (e.g., temperature, precipitation) as self-contained messages with metadata (grid, units, time, level) and compressed binary arrays for efficiency. Two versions exist: GRIB1 and GRIB2 (more flexible templates, better compression). Widely used for NWP model outputs and analyses; supports multiple projections, time steps, and packing methods. Tools like wgrib2 read/convert it. NOAA maintains a github page with the lastest grib conversion tool wgrib2.exe https://github.com/NOAA-EMC/wgrib2/releases.</p>
+<p>Stage IV data were previously contained in GRIB1 format until July 2020. There are significant differences in the processing workflows between GRIB 1 and 2. I don’t intend to write about those in this manual.</p>
 </section>
-<section id="paquet-files-and-s3-storage" class="level2">
-<h2 class="anchored" data-anchor-id="paquet-files-and-s3-storage">paquet files and s3 storage</h2>
+<section id="container-orchestration" class="level3">
+<h3 class="anchored" data-anchor-id="container-orchestration">Container Orchestration</h3>
+<p>Container orchestration and Github Action workflows are located in the following repo:</p>
+<p><a href="https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions">Container Orchestration</a></p>
+<p>The workflow for processing the StageIV data are contained in 3 individual containers described below. The containers are managed by the docker-compose.yml which describes when to spin up each container, how to manage storage, environments etc. The docker-compose.yml is stored in the root folder of the github repo shown above. The docker-compose.yml gets triggered each day via Github Actions - described later. Each of the individual container images are stored on the docker hub repository at: https://hub.docker.com/repositories/cfurl. These should all be public.</p>
 </section>
-<section id="step-2.-clone-and-create-rstudio-project" class="level2">
-<h2 class="anchored" data-anchor-id="step-2.-clone-and-create-rstudio-project">Step 2. Clone and create RStudio project</h2>
-<p>First, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up.</p>
+<section id="individual-containers" class="level3">
+<h3 class="anchored" data-anchor-id="individual-containers">Individual Containers</h3>
+<p>The Dockerfile, code, and explicit Powershell prompts to create the Docker Image and load onto Docker Hub are contained in the following repo:</p>
+<p><a href="https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-docker">Docker Images-Containers</a></p>
+<p>Below is a brief explanation of what each container does.</p>
+<section id="container-1---scraper" class="level4">
+<h4 class="anchored" data-anchor-id="container-1---scraper">Container 1 - Scraper</h4>
+<p>This code takes the current system date and time, visits the appropriate NOMADS url based off of date and time, downloads the 24hr GRIB2 conus file at that url, writes a shell script that is used in the next container to inject prompts to wgrib2.exe, and stores both the shell script and the actual GRIB2 file in a shared storage volume (controlled through docker-compose.yml) that all three containers are linked to.</p>
 </section>
-<section id="step-3.-render-within-rstudio" class="level2">
-<h2 class="anchored" data-anchor-id="step-3.-render-within-rstudio">Step 3. Render within RStudio</h2>
-<p>RStudio will recognize that this is a Quarto project by the presence of the <code>_quarto.yml</code> file and will see the “Build” tab. Click the “Render website” button to render to the <code>_site</code> folder.</p>
-<p><strong>Previewing:</strong> You can either click <code>index.html</code> in the <code>_site</code> folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”.</p>
+<section id="container-2---degrib-your-file" class="level4">
+<h4 class="anchored" data-anchor-id="container-2---degrib-your-file">Container 2 - DeGRIB your file</h4>
+<p>This code simply executes the wgrib2.exe application and takes the data from the binary format and dumps as text. This works in this case since the only thing wrapped in this GRIB2 file is stage4 rainfall. In many meteorological GRIBs there are many variables. The .sh shell file written in container one contain the instructions that are given to the wgrib2.exe applicatoin. This is controlled through docker-compose.yml, namely: “command:”wgrib2_commands.sh”“. The text output which is a bunch of lat/lons and rain values are stored in the same shared volume as the output files from Container 1.</p>
+</section>
+<section id="container-3---write-a-parquet-file-to-an-s3-bucket" class="level4">
+<h4 class="anchored" data-anchor-id="container-3---write-a-parquet-file-to-an-s3-bucket">Container 3 - Write a parquet file to an S3 bucket</h4>
+<p>This docker container connects to your “stg4-texas-24hr” AWS S3 bucket, tidy’s the GRIB2 csv output, clips to area of interest (Texas), and then writes .parquet files that are partitioned by (year, month, day). A note, you would probably have to partition by hour if you do this hourly, because you can’t append a .parquet file to existing data because of how it is written on the disk. Your partitions have to be separate when you are doing this in an automated fashion.</p>
+</section>
+</section>
+<section id="github-actions" class="level3">
+<h3 class="anchored" data-anchor-id="github-actions">Github Actions</h3>
+<p>GitHub Actions is a CI/CD platform integrated into GitHub. It runs workflows defined in YAML to build, test, and deploy code on events like pushes, pull requests, or schedules. Jobs run on hosted runners or self-hosted machines, support matrices, secrets, caching, and reusable actions, enabling reliable pipelines across repositories globally.</p>
+<p><a href="https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions">Github Actions</a></p>
+<p>I keep everything in a single GitHub repo—Dockerfiles, R scripts, and the workflow YAML. GitHub Actions is the scheduler and glue: a nightly cron (plus a manual trigger) launches a three-step, containerized pipeline. Step 1 is scrape: a lightweight Docker image pulls the latest NCEP Stage IV GRIB2 files from NOMADS, drops them and a ready-to-run shell script into a shared volume/workspace, and records the timestamp/digest so runs are idempotent. Step 2 is degrib: I spin up a container that contains wgrib2 and simply execute the script produced in step 1. That dumps the GRIB2 into tidy, delimited text (or binary) with fields like time, grib_id (HRAP bin), and precip. Step 3 is parq-s3: an R-based Docker image (arrow + dplyr + aws.s3) ingests the dump, standardizes column types, and writes partitioned Parquet to AWS S3 with keys like s3://bucket/stg4/ymd=YYYY-MM-DD/…. Partitions (year/month/day) make append-only updates safe and keep queries fast. AWS credentials are injected into the job via GitHub Secrets as environment variables; nothing sensitive is baked into images.</p>
+<p>For mining the parquet, I use Arrow’s S3FileSystem to read datasets lazily straight from S3: open_dataset(“s3://bucket/stg4”) |&gt; filter(time &gt;= …) |&gt; group_by(hrap_id) |&gt; summarize(…). Most analysis is in R with dplyr, which Arrow translates into efficient scans and column pruning. I keep small, pre-aggregated artifacts (e.g., basin/day totals) in S3 as Parquet to accelerate the UI.</p>
+<p>The front end is a Shiny app deployed to Posit Connect Cloud. It reads directly from S3 at runtime (no local copies), applies filters (date range, basin, thresholds), and renders maps/plots (ggplot2 + sf). Because the backend is columnar/parquet and partitioned, responses stay snappy even on large time windows. Deploys are automated: a Connect API token lets Actions redeploy the app on successful nightly runs, so the site reflects fresh data each morning. Net result: GitHub manages source and orchestration, Docker guarantees reproducibility, wgrib2 handles the meteorology-specific conversion, S3 provides durable and cheap storage, Arrow/dplyr power analysis, and Posit Connect publishes a clean, always-current front end.</p>
+</section>
+</section>
+<section id="github-repos" class="level2">
+<h2 class="anchored" data-anchor-id="github-repos">Github repos</h2>
+<p>Looking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.</p>
+<ul>
+<li><a href="https://quarto.org/docs/gallery/">Quarto gallery</a></li>
+<li><a href="https://nmfs-openscapes.github.io/">nmfs-openscapes</a></li>
+<li><a href="https://thefaylab.github.io/lab-manual/">Fay lab manual</a></li>
+<li><a href="https://nmfs-opensci.github.io/quarto_titlepages/">quarto-titlepages</a> Note the link to edit is broken. Go to repo and look in <code>documentation</code> directory.</li>
+</ul>
 
 
 </section>
