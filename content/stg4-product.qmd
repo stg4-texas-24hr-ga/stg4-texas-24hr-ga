@@ -15,8 +15,6 @@ American Meteorological Society Journals
 
 Practically, if you need reliable daily totals for historical flood summaries or water-supply studies, use the reprocessed 24-hour Stage IV; for near-real-time dashboards and alerting, the hourly stream is appropriate but should be treated as provisional until RFC finalization. Data access is available via NOMADS and NOAA Water directories, with numerous third-party mirrors and APIs (e.g., IEM) for convenience. 
 
-## Where to download
-
 ## Additional reading
 
 https://github.com/nmfs-opensci/NOAA-quarto-simple?utm_source=chatgpt.com
