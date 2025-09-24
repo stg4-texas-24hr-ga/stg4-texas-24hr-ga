@@ -1,42 +1,41 @@
 ---
 title: How it works
 ---
-## Workflow overview 
-
-Let's start with a very high level overview of the processes occurring, then we'll briefly chat about some of the main technologies used.  The details page has links to the github repos and further discussion of what is happening at each step.
+## High-level workflow 
 
 1. 24-hour GRIB2 radar file available on NOMADS at 12:55 UTC.  
-2. GitHub Actions cron job is triggered to start a series of docker containers.
-3. Container 1 - scrapes the GRIB2 file from NOMADS site 
-4. Container 2 - GRIB2 file taken out of binary and dumps txt
-5. Container 5 - organize rain data, clip to AOI, and writes .parquet files to AWS S3
-6. Container orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions
-7. Daily rainfall mapped with an R Shiny app and hosted through connect.posit.cloud
-8. Map is updated daily through an empty github commit to connect orchestrated with Github Actions
+2. GitHub Actions cron job is triggered at ~ 13:15 to start a series of docker containers.
+3. Container 1 - scrapes the GRIB2 file from NOMADS site. 
+4. Container 2 - GRIB2 taken out of binary and dumps .txt using wgrib2.exe.
+5. Container 3 - tidy data, clip to AOI, and write .parquet files to AWS s3 bucket.
+6. Container orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions.
+7. GitHub Actions cron job is triggered at ~ 13:30 prompting a republish of map through connect.posit.cloud.
+8. Connect.posit.cloud manages AWS credentials and publishes Rshiny app directly from Github.  
 
 
 ## Docker
 
-Docker has been the most influential piece of tech I've picked up since learning a scripting language.  The basics as I can describe it are you write a piece of code like you normally would and then are able to package that code with everything it needs to work - specific r build, packages to install, shapefiles or other data to inject, and then the entire functioning piece of your code lives in an image and works like it would on your normal local environment.  You can host this image on a repository (docker hub, AWS ECR, local repository) then everytime you want to run the code a container is spun up from the image.  This takes repeatability to a new level.  No more messing with environments when sharing code or hosting on different environments, the code and its processes are held in the container and are bullet proof.  Additionally, you can link containers together, attach data storage volumes to them all while being super lightweight.  My docker hub repository is https://hub.docker.com/repositories/cfurl.  I very much enjoyed learning from Docker in a month of lunches by Elton Stoneman.  
+Docker is the most impactful tool I’ve adopted since learning to script. In short: you write code as usual, then package it into an image that includes the exact R runtime, system libraries, packages, and any required assets (e.g., shapefiles). That image is a portable, versioned artifact that runs the same everywhere. You push it to a registry (Docker Hub, AWS ECR, or a private repo), and whenever you need it, you pull the image and start a container—a clean, repeatable run every time. This kills environment drift and the “works on my machine” problem. Containers are lightweight, can be linked to form pipelines, and can mount volumes for persistent data. My images live here: https://hub.docker.com/repositories/cfurl. I learned from 'Docker in a Month of Lunches' by Elton Stoneman. 
 
 ## wgrib2.exe
 
+wgrib2.exe is a command-line utility for working with GRIB2 meteorological data. It reads GRIB2 files, inspects metadata, and produces concise inventories of the messages they contain. It is widely used to filter and extract variables (e.g., precipitation, temperature, wind), select time steps and vertical levels, and subset by geographic region. The tool can regrid or resample fields to different projections or resolutions, apply standard interpolations, and perform basic calculations. It also supports format conversion, writing outputs to human-readable text/CSV and, when built with the appropriate libraries, to NetCDF. Designed for speed and scripting, it scales well for batch processing and automated workflows on large archives. The “.exe” denotes the Windows build; equivalent functionality is available on Linux and macOS as wgrib2.  It is maintained on github by NOAA here: https://github.com/NOAA-EMC/wgrib2/releases
 
 ## Parquet and Apache Arrow
 
-I picked up the .parquet file structure and Apache Arrow r package from a workshop I took at the POSIT conference in Seattle - Big data with R.  Working with radar files had always been a grind during the PhD years and after due to file sizes you run into.  Dragging some massive amount of data into your memory then manipulating it really limited you to maybe 10G worth of data which is not hard to get to with data coming off radar.  Apache Arrow + .parquet solves this issue by allowing you to query and script on data while it resides on disk and is held out of memory.  I'm the wrong guy to ask about the details, but you can query and manipulate hundreds of gigs of data at a time in a time efficient manner with a simple laptop.  Parquet is the only way I'll keep data files of any size now.  Csv is dead and big data problems are rapidly becoming dead.
+I picked up Apache Parquet and the Arrow R package at the Posit “Big Data with R” workshop, and they’ve been game-changers for radar data. Parquet is a columnar, compressed, splittable file format built for analytics: it stores columns together, so reads are fast and selective (you only scan the columns and row groups you need), and files are much smaller than CSV. Apache Arrow provides a columnar in-memory format and tooling that lets R (and other languages) scan Parquet lazily, push filters down to disk, and stream data in chunks—so you can work with datasets far larger than RAM instead of “loading everything, then filtering.” In practice, that means querying and summarizing hundreds of gigabytes on a laptop, especially when data are partitioned (e.g., by year/month/day) and stored locally or on S3. For analytics at scale, Parquet + Arrow has effectively replaced CSV for me: smaller, faster, and designed for selective reads—exactly what large radar archives demand.
 
 ## S3
 
-There isn't really anything special here or groundbreaking, just had not used S3 storage before.  Since the data collected, manipulated, and displayed automatically I had to pick a cloud storage.  This is seems to be pretty pain free.  aws.s3 and apache arrow are pre-built to work with it, and I've had almost zero trouble spinning it up and maintaining it after some initial AWS woes.
+Amazon S3 is durable, scalable object storage used to hold files of any size (e.g., Parquet) with high availability and pay-as-you-go pricing. It’s a common backbone for “data lake” workflows: tools read/write directly via s3://… paths, and in R, aws.s3 and Arrow support streaming/lazy access without local copies. Access control is handled with IAM; data governance via versioning, lifecycle policies, and server-side encryption. It’s low-maintenance, widely supported, and integrates cleanly with modern analytics stacks. I've used this tutorial regularly: https://www.gormanalysis.com/blog/connecting-to-aws-s3-with-r/
 
 ## Github Actions
 
-Github actions allows you to automatically run code on a variety of triggers including a cron trigger.  This has been a very nice 'training-wheels' tool for me to use to execute code while I sleep.  As I'll discuss later in the 'next steps' I want to move this to an all AWS backend like a real developer would (making excellent progress), but for the time being this works.  It's nice because you can manage the .yml's right there in github where you are maintaining your code, run my container orchestration with docker compose, and very importantly i can inject AWS credentials at run-time with repository secrets.  Went through some pain here trying to hide them in docker images and other tricks.  I also use it to republish this guide everyday after the new radar image drops that you see on the 'Home' page.
+GitHub Actions is GitHub’s built-in CI/CD platform that runs workflows on events (push, PR), schedules (cron), or manual dispatch. Workflows are defined as YAML files stored with your code, so versioning and reviews are straightforward. Runners can execute shell steps, build and run Docker containers (including docker-compose), and orchestrate multi-step jobs across OS targets. Sensitive values are injected at runtime via Repository/Environment Secrets (e.g., AWS credentials), avoiding hard-coding in images or source. Typical uses include scheduled data jobs, automated tests/linting, container builds and publishes, and static-site deploys (e.g., rebuilding documentation or a homepage on a timer). It’s a practical way to automate repeatable tasks directly from the repo without managing separate infrastructure—and can later hand off to a cloud-native backend if needed.
 
 ## posit.connect.cloud
 
-I've spent less than a day building the rshiny app you see here.  Posit.cloud.connect was super easy to spin up, had a way to manage AWS credentials, and is able to auto-update daily with github actions.  In the future I think the the shiny app (or some other web application) should be held in a container and hosted on AWS. That's more stuff to learn and inthe meantime I can deliver rainfall maps and metrics quickly to end users with Connect.
+I've spent less than a day building the rshiny app you see here.  Posit Connect (cloud-managed) is a production publishing platform for R/Python: it hosts Shiny apps, Quarto/R Markdown sites, and APIs (e.g., Plumber) with HTTPS, auth, and versioned deploys. It handles builds and dependencies, environment variables/secrets, scheduled jobs (e.g., daily refresh), and integrates cleanly with Git/GitHub Actions for push-to-deploy. You get logs, usage metrics, access controls/SSO, and simple scaling (multiple processes/workers) without running servers. It’s a fast way to deliver interactive analytics now, with a clear path to containerized hosting on AWS later (ECS/Fargate, EKS, or EC2) using the same CI/secrets patterns.
 
 
 

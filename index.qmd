@@ -8,5 +8,5 @@ Most weather-radar data come from government agencies, yet the outputs are diffi
 
 The geographic region used in this guide is the Edwards Aquifer recharge zone located in south-central Texas.  Rainfall maps and basin averaged accumulation values are published daily at approximately 9:15 AM Central here - [Edwards Aquifer rainfall](https://0198a52d-8079-4ff0-9716-5f6e6c21fb79.share.connect.posit.cloud/).
 
-![Most recent daily precipitation across Edwards Aquifer Recharge Zone](img/rainfall_map.png){fig-cap="24-hour Stage IV radar precipitation (in.)" width=100% fig-align="center"}
+![Precipitation from 7-13-2025 to 7-16-2025 across Edwards Aquifer Recharge Zone](img/rainfall_map2.png){fig-cap="24-hour Stage IV radar precipitation (in.)" width=100% fig-align="center"}
 
