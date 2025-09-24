@@ -6,45 +6,218 @@ title: Images and Containers
 
 ### Delivery of Stage IV data
 
-Stage IV data are available in near real-time on NOMADS at :55 past the hour. StageIV data are available hourly, 6-hr, and 24-hr.  The 6 and 24 hour files are simply summed one hour files. For example, hourly rainfall ending 2:00 (representing 1:00-2:00) are available at 2:55.  Twenty-four hour data are available from 12:00 - 12:00 UTC (available at 12:55 UTC).  Data for the last 14 days are kept on NOMADS after which they are cycled off. The real-time NOMADS site is available at: https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/.  Note there are CONUS, pr (Puerto Rico), and ak (Alaska) files.  
+Stage IV data are packaged as GRIB2 files are available each in 1-hr, 6-hr, and 24-hr files.  The 6 and 24 hour files are summed from the one hour files.   Presently, this tutorial works with a 24-hr file and scrapes data once a day.  It would not be difficult to ammend the code and start the workflow every hour.
 
-An additional rerun at 30h after valid time (18:55Z) is available to supplement 24-hr mosaics if RFCs need to update their QPEs or make changes.  Personal communication with the WGRFC indicates that this is done very infrequently.
+Stage IV data are available in near real-time on NOMADS at :55 past the hour. For example, hourly rainfall ending 2:00 (representing 1:00-2:00) are available at 2:55. Twenty-four hour data are available from 12:00 - 12:00 UTC (available at 12:55 UTC).  Data for the last 14 days are kept on NOMADS after which they are cycled off. The real-time NOMADS site is available [here](https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/).  Note, there are .01h, .06hr, and .24hr files for CONUS, pr (Puerto Rico), and ak (Alaska).  
 
-The archived data were kept for years (decade?) at https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=21.093.  As of summer 2025, the data were moved to https://rda.ucar.edu/datasets/d507005/dataaccess/.
+After the near real-time file drop, an additional rerun at 30h after valid time (18:55Z) is available to supplement 24-hr mosaics if RFCs need to update their QPEs or make changes.  Personal communication with the WGRFC indicates that this is done very infrequently.
 
-In this manual, we are concerned with automating the 24-hr Stage IV rainfall product across Texas.  However, these methods can be altered to work with hourly rainfall anywhere in the lower 48, Alaska or Puerto Rico.   
+Since at least 2012 when I started tinkering with the archived Stage IV data, the historical datasets were kept at [data.eol.ucar](https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=21.093).  As of summer 2025, the data have been moved to [rda.ucar.edu](https://rda.ucar.edu/datasets/d507005/dataaccess/).  At this new archive location they are tarring together Stage IV data on monthly increments.  The data appear to be coming available around the 20th of the next month (for example August data available ~ September 20th).
+
+I intend to add a page to this website describing my manual methods for processing Stage IV data.  Currently, focused on real-time description.  
 
 ### GRIB2  data format
 
-Stage IV data are stored in GRIB2 binary format.  GRIB (GRIdded Binary) is a WMO standard file format for gridded meteorological data. It stores fields (e.g., temperature, precipitation) as self-contained messages with metadata (grid, units, time, level) and compressed binary arrays for efficiency. Two versions exist: GRIB1 and GRIB2 (more flexible templates, better compression). Widely used for NWP model outputs and analyses; supports multiple projections, time steps, and packing methods. Tools like wgrib2 read/convert it. NOAA maintains a github page with the lastest grib conversion tool wgrib2.exe https://github.com/NOAA-EMC/wgrib2/releases.
-
-Stage IV data were previously contained in GRIB1 format until July 2020.  There are significant differences in the processing workflows between GRIB 1 and 2.  I don't intend to write about those in this manual.
+As previously described, Stage IV data are stored in GRIB2 binary format.  Stage IV precipitation has been packaged in both the GRIB1 format (until July 2020) and currently resides in the GRIB2 format.  The processing procedures and wgrib.exe utility are completely different.  When I get to the descritption of building a historical archive at a site I'll have to cover GRIB1 processing. 
 
 ### Container Orchestration
 
-Container orchestration and Github Action workflows are located in the following repo:
+The workflow is accomplished by linking containers together using a docker compose orchestration and tripping off the  series of containers with a github actions cron job.
 
-[Container Orchestration](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
+Container orchestration and Github Action workflows are located in the following repo: [Container Orchestration](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
 
-The workflow for processing the StageIV data are contained in 3 individual containers described below.  The containers are managed by the docker-compose.yml which describes when to spin up each container, how to manage storage, environments etc.  The docker-compose.yml is stored in the root folder of the github repo shown above.  The docker-compose.yml gets triggered each day via Github Actions - described later.  Each of the individual container images are stored on the docker hub repository at: https://hub.docker.com/repositories/cfurl. These should all be public. 
+The containers are managed by a docker-compose.yml shown below which describes when to spin up each container, how to manage storage, environments etc.  The docker-compose.yml is stored in the root folder of the github repo shown above.  
+
+```{r}
+#| eval: false
+#| echo: true
+
+#docker-compose.yml - keep in root folder of your github actions repo
+
+services:
+  
+  scraper:
+    image: cfurl/stg4_24hr_scraper:v1
+    container_name: scrape24
+    volumes:
+      - st4_data:/home/data
+
+  wgrib2:
+    image: cfurl/sondngyn_wgrib2:v1
+    container_name: wgrib2
+    command: "wgrib2_commands.sh"
+    depends_on:
+      scraper:
+        condition: service_completed_successfully
+    volumes: 
+      - st4_data:/srv/
+      - st4_data:/opt/    
+      
+  parqs3:
+    image: cfurl/stg4_24hr_parq_s3:v1
+    container_name: parqs3
+    depends_on:
+      wgrib2:
+        condition: service_completed_successfully
+    volumes:
+      - st4_data:/home/data
+    env_file:
+      - .env
+
+volumes:
+  st4_data:
+
+```
+
+
+The docker-compose.yml gets triggered each day via Github Actions - described later.  Each of the individual container images are stored on the docker hub repository at: [hub.docker.cfurl](https://hub.docker.com/repositories/cfurl). These should all be public. The workflow for processing the Stage IV data are contained in 3 individual containers described below.  
 
 ### Individual Containers
 
-The Dockerfile, code, and explicit Powershell prompts to create the Docker Image and load onto Docker Hub are contained in the following repo: 
+The Dockerfile, code, and explicit Powershell prompts to create the Docker Image and load onto Docker Hub are contained in the following repo: [Docker Images-Containers](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-docker)
 
-[Docker Images-Containers](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-docker)
+Before I get to the scripts held in each individual container I want to take a quick look at how images are constructed.  You simply give docker a set of instructions in your 'Dockerfile' and then build it through powershell commands.  AFter it's built, you can upload to your repository.
 
-Below is a brief explanation of what each container does.  
+```{r}
+#| eval: false
+#| echo: true
+
+# Dockerfile
+
+FROM rocker/r-ver:4.2.2
+
+RUN mkdir -p /home
+RUN mkdir -p /home/code
+RUN mkdir -p /home/data
+
+WORKDIR /home
+
+COPY /code/write_parq_2_s3.R /home/code/write_parq_2_s3.R
+COPY /code/install_packages.R /home/code/install_packages.R
+COPY /data/texas_buffer_spatial_join.csv /home/data/texas_buffer_spatial_join.csv
+
+RUN Rscript /home/code/install_packages.R
+
+CMD Rscript /home/code/write_parq_2_s3.R
+
+```
+
+
+
+Below is are brief explanations of what each container accomplishes.  
 
 #### Container 1 - Scraper
 
 This code takes the current system date and time, visits the appropriate NOMADS url based off of date and time, downloads the 24hr GRIB2 conus file at that url, writes a shell script that is used in the next container to inject prompts to wgrib2.exe, and stores both the shell script and the actual GRIB2 file in a shared storage volume (controlled through docker-compose.yml) that all three containers are linked to.  
 
+```{r}
+#| eval: false
+#| echo: true
+
+library(dplyr)
+library(stringr)
+library(rvest)
+
+# create function to print out UTC time with utc_time()
+now_utc <- function() {
+  now <- Sys.time()
+  attr(now, "tzone") <- "UTC"
+  now
+}
+
+# create character string of the hour
+hour_char<-str_sub(as.character(now_utc()),start=12,end=13)
+# create numeric hour
+hour_num<-as.numeric(hour_char)
+
+# create character string for date
+date_char<- str_sub(as.character(now_utc()),start=1,end=10) %>% str_remove_all("-")
+# create dateclass date with utc timezone
+now_utc_date<-as.Date(now_utc(),tz="UTC")
+
+
+# read nomads stg4 html page using date from utc_time()
+stg4_http_page<-read_html(paste0("https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/pcpanl.",date_char,"/"))
+
+# find only files that end with .grb2 and have 'pcp' somewhere in the string
+grib2_available <- stg4_http_page %>%
+  html_elements("a") %>%
+  html_text() %>%
+  str_subset("conus") %>%
+  str_subset("24h.grb2$") 
+
+# create path to download
+source_path<-paste0("https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/pcpanl.",date_char,"//",tail(grib2_available,n=1))
+
+# create download destination
+destination_path<-paste0("/home/data/",tail(grib2_available,n=1))
+
+#download the file  
+download.file (source_path,destination_path,method = "libcurl")
+
+# Write your shell file to communicate with the wgrib2 container
+txt<- paste("wgrib2", tail(grib2_available,n=1), "-csv",  str_replace(tail(grib2_available,n=1), ".grb2", ".txt"))
+writeLines(txt,paste0("/home/data","/wgrib2_commands.sh"))
+
+```
+
+
 #### Container 2 - DeGRIB your file
 
 This code simply executes the wgrib2.exe application and takes the data from the binary format and dumps as text.  This works in this case since the only thing wrapped in this GRIB2 file is stage4 rainfall.  In many meteorological GRIBs there are many variables.  The .sh shell file written in container one contain the instructions that are given to the wgrib2.exe applicatoin.  This is controlled through docker-compose.yml, namely: "command: "wgrib2_commands.sh"". The text output which is a bunch of lat/lons and rain values are stored in the same shared volume as the output files from Container 1.  
 
-#### Container 3 - Write a parquet file to an S3 bucket
+I didn't place the wgrib.exe in an image.  There are plenty of images available on docker hub where someone has already done this.  I've been using the image located here: sondngyn/wgrib2:latest.  Below I show the docker commands to copy that image into my repository so I'm not vulnerable to changes in the sondngyn hu repo.
+
+```{r}
+#| eval: false
+#| echo: true
+#| 
+Simple pull, retag, push:
+
+# pull upstream
+docker pull sondngyn/wgrib2:latest
+
+# retag to your namespace
+docker tag sondngyn/wgrib2:latest cfurl/sondngyn_wgrib2:v1
+
+# login and push
+docker login
+docker push cfurl/sondngyn_wgrib2:v1
+
+# Test it with docker-compose.yml:
+
+services:
+  
+  scraper:
+    image: cfurl/stg4_24hr_scraper:v1
+    container_name: scrape24
+    networks:
+      - some_name
+    volumes:
+      - st4_data:/home/data
+
+  wgrib2:
+    image: cfurl/sondngyn_wgrib2:v1
+    container_name: wgrib2
+    command: "wgrib2_commands.sh"
+    depends_on:
+      scraper:
+        condition: service_completed_successfully
+    volumes: 
+      - st4_data:/srv/
+      - st4_data:/opt/    
+      
+networks:
+  some_name:
+    external:
+        name: st4_net
+        
+volumes:
+  st4_data:
+
+```
+
+#### Container 3 - Write a .parquet file to an S3 bucket
 
 This docker container connects to your "stg4-texas-24hr" AWS S3 bucket, tidy's the GRIB2 csv output, clips to area of interest (Texas), and then writes .parquet files that are partitioned by (year, month, day).  A note, you would probably have to partition by hour if you do this hourly, because you can't append a .parquet file to existing data because of how it is written on the disk.  Your partitions have to be separate when you are doing this in an automated fashion.
 
@@ -54,23 +227,109 @@ GitHub Actions is a CI/CD platform integrated into GitHub. It runs workflows def
 
 [Github Actions](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
 
+```{r}
+#| eval: false
+#| echo: true
+
+library("aws.s3")
+library("arrow")
+library("dplyr")
+library("lubridate")
+library("tidyr")
+library("readr")
+library("stringr")
+
+# make sure you can connect to your bucket and open SubTreeFileSystem
+bucket <- s3_bucket("stg4-texas-24hr")
+
+# list everything in your bucket in a recursive manner
+bucket$ls(recursive = TRUE)
+
+# identify path where you will be writing the .parq files
+s3_path <- bucket$path("")
+
+aoi_texas_buffer<-read_csv("/home/data/texas_buffer_spatial_join.csv")
+
+# list files that start with st4 and ends with .txt
+raw_grib2_text = list.files("/home/data", pattern = "^st4_conus.*.txt$",full.names=FALSE)
+
+for (h in raw_grib2_text) {
+  name <- h |>
+    str_replace("st4_conus.", "t") |>
+    str_replace(".24h.txt","")
+  
+  aa<-read_csv(paste0("/home/data/",h), col_names=FALSE) %>%
+  #aa<-read_csv(h, col_names=FALSE) %>%
+    setNames(c("x1","x2","x3","x4","center_lon","center_lat",name)) %>%
+    select(-x1,-x2,-x3,-x4)   
+  
+  # joins by "center_lon", "center_lat"
+  bb<- left_join(aoi_texas_buffer,aa,by=NULL)%>%
+    pivot_longer(!1:5, names_to = "time", values_to = "rain_mm") %>%
+    mutate(time = ymd_h(str_sub(time,2,11))) %>%
+    mutate (year = year(time), month = month(time), day = day(time), hour = hour(time)) %>%
+    relocate(rain_mm, .after = last_col()) 
+}  
+
+bb|>
+  group_by(year,month,day) |>
+  write_dataset(path = s3_path,
+                format = "parquet")
+```
 
 
+## Github Actions
+
+Github actions is what makes the automation work.  The docker-compose.yml is fired by the compose-workflow.yml.  This compose-workflow.yml has to be helf in a folder called '.github/workflows'.  AWS credentials are managed through Github via the repository.  AWS credentials are injected at runtime through the actions .yml. The yml is shown below:
+
+```{r}
+#| eval: false
+#| echo: true
+
+name: stg4-texas-24hr-backend-actions
+
+on:
+  schedule:
+    - cron: '45 13 * * *'  # Runs daily at 13:45 UTC
+  workflow_dispatch:       # Also allow manual triggering
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Docker using Docker's official script
+        run: |
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.27.0/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
+      - name: Create .env file with AWS credentials
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "AWS_REGION=${{ secrets.AWS_REGION }}" >> .env
+
+      - name: Run Docker Compose (with AWS env)
+        run: docker-compose up
+        continue-on-error: false
+```
 
 
+## Github repositories and this webpage
 
-I keep everything in a single GitHub repo—Dockerfiles, R scripts, and the workflow YAML. GitHub Actions is the scheduler and glue: a nightly cron (plus a manual trigger) launches a three-step, containerized pipeline. Step 1 is scrape: a lightweight Docker image pulls the latest NCEP Stage IV GRIB2 files from NOMADS, drops them and a ready-to-run shell script into a shared volume/workspace, and records the timestamp/digest so runs are idempotent. Step 2 is degrib: I spin up a container that contains wgrib2 and simply execute the script produced in step 1. That dumps the GRIB2 into tidy, delimited text (or binary) with fields like time, grib_id (HRAP bin), and precip. Step 3 is parq-s3: an R-based Docker image (arrow + dplyr + aws.s3) ingests the dump, standardizes column types, and writes partitioned Parquet to AWS S3 with keys like s3://bucket/stg4/ymd=YYYY-MM-DD/…. Partitions (year/month/day) make append-only updates safe and keep queries fast. AWS credentials are injected into the job via GitHub Secrets as environment variables; nothing sensitive is baked into images.
+I started a github organization called 'stg4-texas-24hr-ga' this allows me to segregate polished work from my messy personal github repository.  Below are links to pertinent repositories.
 
-For mining the parquet, I use Arrow’s S3FileSystem to read datasets lazily straight from S3: open_dataset("s3://bucket/stg4") |> filter(time >= …) |> group_by(hrap_id) |> summarize(...). Most analysis is in R with dplyr, which Arrow translates into efficient scans and column pruning. I keep small, pre-aggregated artifacts (e.g., basin/day totals) in S3 as Parquet to accelerate the UI.
-
-The front end is a Shiny app deployed to Posit Connect Cloud. It reads directly from S3 at runtime (no local copies), applies filters (date range, basin, thresholds), and renders maps/plots (ggplot2 + sf). Because the backend is columnar/parquet and partitioned, responses stay snappy even on large time windows. Deploys are automated: a Connect API token lets Actions redeploy the app on successful nightly runs, so the site reflects fresh data each morning. Net result: GitHub manages source and orchestration, Docker guarantees reproducibility, wgrib2 handles the meteorology-specific conversion, S3 provides durable and cheap storage, Arrow/dplyr power analysis, and Posit Connect publishes a clean, always-current front end.
-
-## Github repos
-
-Looking at other people's Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.
-
-* [Quarto gallery](https://quarto.org/docs/gallery/)
-* [nmfs-openscapes](https://nmfs-openscapes.github.io/)
-* [Fay lab manual](https://thefaylab.github.io/lab-manual/)
-* [quarto-titlepages](https://nmfs-opensci.github.io/quarto_titlepages/) Note the link to edit is broken. Go to repo and look in `documentation` directory.
+* [stg4-texas-24hr-ga organization](https://github.com/stg4-texas-24hr-ga)
+* [Github pages - this website](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-ga)
+* [Docker Image builds](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-docker)
+* [Actions and Compose](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
 

@@ -10,7 +10,7 @@ title: How it works
 5. Container 3 - tidy data, clip to AOI, and write .parquet files to AWS s3 bucket.
 6. Container orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions.
 7. GitHub Actions cron job is triggered at ~ 13:30 prompting a republish of map through connect.posit.cloud.
-8. Connect.posit.cloud manages AWS credentials and publishes Rshiny app directly from Github.  
+8. Connect.posit.cloud manages AWS credentials and publishes Rshiny app directly from Github frontend repo.  
 
 
 ## Docker
