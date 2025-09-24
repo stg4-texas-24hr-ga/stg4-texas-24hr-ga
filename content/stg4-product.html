@@ -29,7 +29,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/tech_stack.html" rel="next">
+<link href="../content/tech_overview.html" rel="next">
 <link href="../index.html" rel="prev">
 <link href="../images/favicon.ico" rel="icon">
 <script src="../site_libs/quarto-html/quarto.js"></script>
@@ -119,26 +119,26 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/tech_stack.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tech stack</span></a>
+  <a href="../content/tech_overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tech overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/containers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Docker images</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/automation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Automation</span></a>
+  <a href="../content/backend.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Backend</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/frontend.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Viewer</span></a>
+ <span class="menu-text">Frontend</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/roadmap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Roadmap</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -185,17 +185,17 @@ ul.task-list li input[type="checkbox"] {
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.</p>
-<p>Real-time Stage IV fields appear within a couple of hours after the accumulation window and are progressively “filled in” as additional RFCs publish; hourly fields are typically finalized 12–18 hours later, and 6-hour/24-hour mosaics by late the following day. For retrospective analyses, the reprocessed 24-hour Stage IV is generally the most accurate choice.</p>
-<p>Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and, via NOAA Water, as NetCDF and GeoTIFF for CONUS/Alaska/Puerto Rico, which simplifies ingestion into GIS and scientific workflows.</p>
-<p>While the product provides near-national coverage at consistent resolution, users should remain mindful of known QPE limitations—e.g., radar beam blockage, bright-band contamination, convective undercatch, and sparse gauges in complex terrain—which can introduce regional biases that propagate into the mosaic. Peer-reviewed assessments document these characteristics and support best-practice choices (e.g., favoring the reprocessed daily field for post-event totals). American Meteorological Society Journals</p>
-<p>Practically, if you need reliable daily totals for historical flood summaries or water-supply studies, use the reprocessed 24-hour Stage IV; for near-real-time dashboards and alerting, the hourly stream is appropriate but should be treated as provisional until RFC finalization. Data access is available via NOMADS and NOAA Water directories, with numerous third-party mirrors and APIs (e.g., IEM) for convenience.</p>
+<p>The Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available in near real-time via NOMADS.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="content_img/conus.gif" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Stg4 Conus output from NOMADS</figcaption>
+</figure>
+</div>
 </section>
 <section id="additional-reading" class="level2">
 <h2 class="anchored" data-anchor-id="additional-reading">Additional reading</h2>
-<p>https://github.com/nmfs-opensci/NOAA-quarto-simple?utm_source=chatgpt.com</p>
-<ul>
-<li>Add the files to <code>_quarto.yml</code></li>
-</ul>
+<p>Put your bibliography here</p>
 
 
 </section>
@@ -556,8 +556,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/tech_stack.html" class="pagination-link">
-        <span class="nav-page-text">Tech stack</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/tech_overview.html" class="pagination-link">
+        <span class="nav-page-text">Tech overview</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
