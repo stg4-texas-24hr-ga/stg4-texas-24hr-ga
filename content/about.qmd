@@ -2,4 +2,11 @@
 title: About
 ---
 
-Use this as a 'things I like' page.  This can hold a lot of your stage4 quarto-book and all the links you commonly reference.
+* [Pirate Weather](https://pirateweather.net/en/latest/) learned an absolute ton about proper frameworks from this fella.
+* [KEWX Station](https://www.weather.gov/ewx/)
+* [r4ds](https://r4ds.hadley.nz/)
+* [Docker in a month of lunches](https://www.manning.com/books/learn-docker-in-a-month-of-lunches)
+* [Happy git with R](https://happygitwithr.com/)
+* [Arrow R Package](https://arrow.apache.org/docs/r/)
+* [NOAA Quarto website](https://github.com/nmfs-opensci/NOAA-quarto-simple)
+* [Iowa State Mesonet](https://mesonet.agron.iastate.edu/)
