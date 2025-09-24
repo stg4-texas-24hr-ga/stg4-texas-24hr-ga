@@ -36,14 +36,14 @@ website:
         text: Home
       - href: content/stg4-product.qmd
         text: Stage IV precipitation
-      - href: content/tech_stack.qmd
-        text: Tech stack
-      - href: content/containers.qmd
-        text: Docker images
-      - href: content/automation.qmd
-        text: Automation
+      - href: content/tech_overview.qmd
+        text: Tech overview
+      - href: content/backend.qmd
+        text: Backend
       - href: content/frontend.qmd
-        text: Viewer
+        text: Frontend
+      - href: content/roadmap.qmd
+        text: Roadmap
       - href: content/about.qmd
         text: About
 
