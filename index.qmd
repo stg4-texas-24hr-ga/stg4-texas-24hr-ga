@@ -4,7 +4,7 @@ subtitle: "A guide to near real-time automated Stage IV QPE processing and mappi
 page-layout: full
 ---
 
-![Precipitation from 7-13-2025 to 7-16-2025 across Edwards Aquifer Recharge Zone](img/rainfall_map2.png){fig-cap="24-hour Stage IV radar precipitation (in.)" width=100% fig-align="center"}
+![Precipitation from 7-13-2025 to 7-16-2025 across Edwards Aquifer Recharge Zone](img/rainfall_map2.png){fig-cap="24-hour Stage IV radar precipitation (in.)" width=70% fig-align="center"}
 
 Most radar-rainfall data are freely available from government agencies, yet the outputs are difficult difficult to process or tailor to local watersheds.  This guide  documents the development of an automated radar precipitation processing system across a watershed of interest using the Stage IV QPE product from NCEP.  Following the framework described in this guide, users can automate collection of radar rainfall across a watershed that can be used to track droughts, forecast reservoir inflows, estimate soil moisture, force surface water models, etc.  
 
