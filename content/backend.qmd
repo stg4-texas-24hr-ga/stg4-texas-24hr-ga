@@ -1,5 +1,5 @@
 ---
-title: Images and Containers
+title: Backend
 ---
 
 ## The Details
@@ -329,7 +329,7 @@ jobs:
 I started a github organization called 'stg4-texas-24hr-ga' this allows me to segregate polished work from my messy personal github repository.  Below are links to pertinent repositories.
 
 * [stg4-texas-24hr-ga organization](https://github.com/stg4-texas-24hr-ga)
-* [Github pages - this website](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-ga)
-* [Docker Image builds](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-docker)
-* [Actions and Compose](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
+* [This website repo /stg4-texas-24hr-ga/stg4-texas-24hr-ga](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-ga)
+* [Docker Image builds /stg4-texas-24hr-ga/stg4-texas-24hr-docker](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-docker)
+* [Actions and Compose /stg4-texas-24hr-backend-actions](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-backend-actions)
 

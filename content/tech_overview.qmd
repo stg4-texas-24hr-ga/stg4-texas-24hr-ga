@@ -3,6 +3,8 @@ title: How it works
 ---
 ## High-level workflow 
 
+Almost all of the code from downloading the data to publishing the website are written in R.  Below are the main steps involved along with a description of the important technologies.   
+
 1. 24-hour GRIB2 radar file available on NOMADS at 12:55 UTC.  
 2. GitHub Actions cron job is triggered at ~ 13:15 to start a series of docker containers.
 3. Container 1 - scrapes the GRIB2 file from NOMADS site. 

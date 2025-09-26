@@ -2,7 +2,7 @@
 title: About
 ---
 
-* [Pirate Weather](https://pirateweather.net/en/latest/) learned an absolute ton about proper frameworks from this fella.
+* [Pirate Weather](https://pirateweather.net/en/latest/) 
 * [KEWX Station](https://www.weather.gov/ewx/)
 * [r4ds](https://r4ds.hadley.nz/)
 * [Docker in a month of lunches](https://www.manning.com/books/learn-docker-in-a-month-of-lunches)
@@ -10,3 +10,7 @@ title: About
 * [Arrow R Package](https://arrow.apache.org/docs/r/)
 * [NOAA Quarto website](https://github.com/nmfs-opensci/NOAA-quarto-simple)
 * [Iowa State Mesonet](https://mesonet.agron.iastate.edu/)
+* [RTMA-URMA](https://sites.google.com/a/ucar.edu/model-encyclo-determ/deterministic/analyses/rtma-urma)
+* [NCEP Products inventory](https://www.nco.ncep.noaa.gov/pmb/products/rtma/)
+* [Quarto build i like](https://github.com/mcanouil/awesome-quarto?tab=readme-ov-file)
+* [stg4 data nomads](https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/)
