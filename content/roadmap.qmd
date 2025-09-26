@@ -5,6 +5,7 @@ title: Roadmap
 To-do in the best order I can come up with:
 
 Small things:
+
 1. Build out the shiny app front end just a little more - add ytd precip maps, hyetograph, and table sub-basin rain calculations.
 3. Add daily images of ytd rainfall and 24hour rainfall to your backend storage.
 2. Add the historical data that you have on disk to your s3 bucket.  Currently, you only hold data on AWS for Texas for 2025.
@@ -12,6 +13,7 @@ Small things:
 4. Document your manual processing flows when you load the 2002-2024 onto s3 bucket
 
 Big things:
+
 1. Build out the backend on completely AWS framework. Cloudwatch -> Fargate -> S3 -> EC2 hosted web app
 2. Stand-up an hourly AWS real-time site
 3. Get a well working surface water model, containerize it, and start forcing it hourly.
