@@ -7,7 +7,9 @@ title: Frontend
 ### HRAP Grid
 
 I recall going through a lot of difficulty years ago trying to get the grid and bin mapping straightened away like I wanted it.  One of the problems is that the HRAP cell size changes with Latitude.  All of the answers lie in: "Coordinate Transformations for Using NEXRAD 
-data in GIS-based Hydrologic Modeling' by Reed and Maidment (1999).  I may have read this journal article more than any other article.  I was able to build a shapefile of the HRAP grid that I validated through published bin sizes (in Reed and Maidment) with this article and a pearl script from Stuart foote that wrote the corner intersecting vertices of the of the HRAP grid.  Complicated stuff.  I need to put the shapefile of the hrap grid on a github repo somewhere. I have .csv for state of Texas that associates lat-lon with HRAP Grid ID.  My shapefile holds HRAP Grid ID and Stg4 dumps center point (lan-lon) of radar bin. So, i can quickly map rainfall amount to HRAP Grid and my shapefile holds the size of the radar bin.   The next time I work in a new geographic location I will document handling of the grid better. 
+data in GIS-based Hydrologic Modeling' by Reed and Maidment (1999).  I may have read this journal article more than any other article.  I was able to build a shapefile of the HRAP grid that I validated through published bin sizes (in Reed and Maidment) with this article and a pearl script from Stuart foote that wrote the corner intersecting vertices of the of the HRAP grid.  Complicated stuff.  I need to put the shapefile of the hrap grid on a github repo somewhere. I have .csv for state of Texas that associates lat-lon with HRAP Grid ID.  My shapefile holds HRAP Grid ID and Stg4 dumps center point (lan-lon) of radar bin. So, i can quickly map rainfall amount to HRAP Grid and my shapefile holds the size of the radar bin.   
+
+The next time I work in a new geographic location I will document handling of the grid better. 
 
 ### Rshiny App
 
