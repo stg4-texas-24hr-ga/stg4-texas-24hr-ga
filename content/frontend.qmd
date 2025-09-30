@@ -277,3 +277,41 @@ In this case, I have a front end repository up at [/stg4-texas-24hr-frontend-act
 
 The PCC website republishes everytime there is a commit to the github repo.  This is fine when your developing, but causes issue if you want regular republishing.  To work around this, my PCC website publishes daily by an 'empty' commit on a cron job via Github Actions.  PCC doesn't have the ability to schedule cron jobs so my workaround was to do a dummy commit with GA so that it publishes daily.  
 
+```{r}
+#| eval: false
+#| echo: true
+
+name: Daily Connect redeploy nudge
+
+on:
+  schedule:
+    # 8:45 AM America/Chicago (DST Mar–Oct)vv
+    - cron: "57 13 * 3-10 *"
+    # 8:45 AM America/Chicago (Standard Nov–Feb)
+    - cron: "57 14 * 11,12,1,2 *"
+  workflow_dispatch:
+
+jobs:
+  nudge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create empty commit
+        run: |
+          git commit --allow-empty -m 'chore: daily redeploy nudge [skip ci]'
+
+      - name: Push to default branch
+        run: |
+          git push origin "HEAD:${{ github.event.repository.default_branch }}"
+```
+
