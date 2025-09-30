@@ -132,7 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../img/mapR_logo_white.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      <img src="../img/logo.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
       </a>
       <div class="sidebar-tools-main tools-wide">
     <a href="https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/" title="Stage IV NOMADS" class="quarto-navigation-tool px-1" aria-label="Stage IV NOMADS"><i class="bi bi-globe"></i></a>
@@ -234,7 +234,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="the-details">The Details</h2>
 <section id="hrap-grid" class="level3">
 <h3 class="anchored" data-anchor-id="hrap-grid">HRAP Grid</h3>
-<p>I recall going through a lot of difficulty years ago trying to get the grid and bin mapping straightened away like I wanted it. One of the problems is that the HRAP cell size changes with Latitude. All of the answers lie in: “Coordinate Transformations for Using NEXRAD data in GIS-based Hydrologic Modeling’ by Reed and Maidment (1999). I may have read this journal article more than any other article. I was able to build a shapefile of the HRAP grid that I validated through published bin sizes (in Reed and Maidment) with this article and a pearl script from Stuart foote that wrote the corner intersecting vertices of the of the HRAP grid. Complicated stuff. I need to put the shapefile of the hrap grid on a github repo somewhere. I have .csv for state of Texas that associates lat-lon with HRAP Grid ID. My shapefile holds HRAP Grid ID and Stg4 dumps center point (lan-lon) of radar bin. So, i can quickly map rainfall amount to HRAP Grid and my shapefile holds the size of the radar bin. The next time I work in a new geographic location I will document handling of the grid better.</p>
+<p>I recall going through a lot of difficulty years ago trying to get the grid and bin mapping straightened away like I wanted it. One of the problems is that the HRAP cell size changes with Latitude. All of the answers lie in: “Coordinate Transformations for Using NEXRAD data in GIS-based Hydrologic Modeling’ by Reed and Maidment (1999). I may have read this journal article more than any other article. I was able to build a shapefile of the HRAP grid that I validated through published bin sizes (in Reed and Maidment) with this article and a pearl script from Stuart foote that wrote the corner intersecting vertices of the of the HRAP grid. Complicated stuff. I need to put the shapefile of the hrap grid on a github repo somewhere. I have .csv for state of Texas that associates lat-lon with HRAP Grid ID. My shapefile holds HRAP Grid ID and Stg4 dumps center point (lan-lon) of radar bin. So, i can quickly map rainfall amount to HRAP Grid and my shapefile holds the size of the radar bin.</p>
+<p>The next time I work in a new geographic location I will document handling of the grid better.</p>
 </section>
 <section id="rshiny-app" class="level3">
 <h3 class="anchored" data-anchor-id="rshiny-app">Rshiny App</h3>
@@ -494,6 +495,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Posit.Connect.Cloud is nice for a few reasons 1). you can stand up a website, quarto build, or shiny app in a few minutes 2). It publishes directly from your github repository so you can develop in the same place you publish, and 3). You can add secrets to inject passwords at runtime - so you can interact with you AWS environment with very little pain.</p>
 <p>In this case, I have a front end repository up at <a href="https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-frontend-actions">/stg4-texas-24hr-frontend-actions</a> however my website is not publishing from there. I am publishing from <a href="https://github.com/cfurl/st4_front_query_map">cfurl/st4_front_query_map</a>. My posit.connect.cloud is associated with ‘cfurl’ repository and the third party app that links github-PCC can only be associated with one repo owner (in this case cfurl).</p>
 <p>The PCC website republishes everytime there is a commit to the github repo. This is fine when your developing, but causes issue if you want regular republishing. To work around this, my PCC website publishes daily by an ‘empty’ commit on a cron job via Github Actions. PCC doesn’t have the ability to schedule cron jobs so my workaround was to do a dummy commit with GA so that it publishes daily.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>name<span class="sc">:</span> Daily Connect redeploy nudge</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>on<span class="sc">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  schedule<span class="sc">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 8:45 AM America/Chicago (DST Mar–Oct)vv</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span> cron<span class="sc">:</span> <span class="st">"57 13 * 3-10 *"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 8:45 AM America/Chicago (Standard Nov–Feb)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span> cron<span class="sc">:</span> <span class="st">"57 14 * 11,12,1,2 *"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  workflow_dispatch<span class="sc">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>jobs<span class="sc">:</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  nudge<span class="sc">:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    runs<span class="sc">-</span>on<span class="sc">:</span> ubuntu<span class="sc">-</span>latest</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    permissions<span class="sc">:</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      contents<span class="sc">:</span> write</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    steps<span class="sc">:</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> uses<span class="sc">:</span> actions<span class="sc">/</span>checkout<span class="sc">@</span>v4</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        with<span class="sc">:</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>          persist<span class="sc">-</span>credentials<span class="sc">:</span> true</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> name<span class="sc">:</span> Configure git identity</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        run<span class="sc">:</span> <span class="er">|</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>          git config user.name <span class="st">"github-actions[bot]"</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>          git config user.email <span class="st">"41898282+github-actions[bot]@users.noreply.github.com"</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> name<span class="sc">:</span> Create empty commit</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        run<span class="sc">:</span> <span class="er">|</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>          git commit <span class="sc">--</span>allow<span class="sc">-</span>empty <span class="sc">-</span>m <span class="st">'chore: daily redeploy nudge [skip ci]'</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> name<span class="sc">:</span> Push to default branch</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        run<span class="sc">:</span> <span class="er">|</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>          git push origin <span class="st">"HEAD:${{ github.event.repository.default_branch }}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>
