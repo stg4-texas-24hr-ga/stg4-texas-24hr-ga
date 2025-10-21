@@ -12,6 +12,7 @@ Small things:
 3. Figure out how to cache your map tiles to speed up shiny app
 4. Document your manual processing flows when you load the 2002-2024 onto s3 bucket
 5. link this page with github actions to publish daily
+6. add your make map container to the stg4-texas-docker repo after you monitor for a few days
 
 Big things:
 
