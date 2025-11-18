@@ -188,13 +188,15 @@ ul.task-list li input[type="checkbox"] {
 <p>To-do in the best order I can come up with:</p>
 <p>Small things:</p>
 <ol type="1">
-<li>Build out the shiny app front end just a little more - add ytd precip maps, hyetograph, and table sub-basin rain calculations.</li>
-<li>Add daily images of ytd rainfall and 24hour rainfall to your backend storage.</li>
-<li>Add the historical data that you have on disk to your s3 bucket. Currently, you only hold data on AWS for Texas for 2025.</li>
-<li>Figure out how to cache your map tiles to speed up shiny app</li>
-<li>Document your manual processing flows when you load the 2002-2024 onto s3 bucket</li>
+<li>Document your manual processing flows when you load the 2002-2024 onto s3 bucket - add document on this site</li>
+<li>add 2025 to stg4-texas-24hr-historical and start a daily parquet write to this bucket</li>
+<li>remove bucket$ls call from container</li>
+<li>create new current year and historical buckets with just Edwards radar bins (include recharge and artesian), stop carrying state</li>
+<li>point your makemap container to the newly created EAA S3.</li>
+<li>create hyetograph figure (png), containerize, and to docker-compose workflow for daily publish and daily PCC site</li>
+<li>add your dailystat, makemap, hyetograph container to the stg4-texas-docker repo after you monitor for a few days</li>
 <li>link this page with github actions to publish daily</li>
-<li>add your make map container to the stg4-texas-docker repo after you monitor for a few days</li>
+<li>keep working on this website, a number of things have changed in your workflows 10.build out the 2002-2025 mapper for internal use with EAA S3</li>
 </ol>
 <p>Big things:</p>
 <ol type="1">
@@ -204,6 +206,7 @@ ul.task-list li input[type="checkbox"] {
 <li>Add the RTMA product to your stack.</li>
 <li>Start in on sub-hourly MRMS processing</li>
 </ol>
+<p>DONE - Add daily images of ytd rainfall and 24hour rainfall to your S3 storage. (Found in stg4-edwards-daily-maps Bucket) - Add the historical data that you have on disk to your S3 bucket. (2002-2024 added; in stg4-texas-24hr-historical Bucket) - Figure out how to cache your map tiles to speed up shiny app (Done, hardwired them in container)</p>
 
 
 
