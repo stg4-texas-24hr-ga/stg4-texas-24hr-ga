@@ -6,13 +6,17 @@ To-do in the best order I can come up with:
 
 Small things:
 
-1. Build out the shiny app front end just a little more - add ytd precip maps, hyetograph, and table sub-basin rain calculations.
-3. Add daily images of ytd rainfall and 24hour rainfall to your backend storage.
-2. Add the historical data that you have on disk to your s3 bucket.  Currently, you only hold data on AWS for Texas for 2025.
-3. Figure out how to cache your map tiles to speed up shiny app
-4. Document your manual processing flows when you load the 2002-2024 onto s3 bucket
-5. link this page with github actions to publish daily
-6. add your make map container to the stg4-texas-docker repo after you monitor for a few days
+1. Document your manual processing flows when you load the 2002-2024 onto s3 bucket - add document on this site
+2. add 2025 to stg4-texas-24hr-historical and start a daily parquet write to this bucket
+3. remove bucket$ls call from container
+4. create new current year and historical buckets with just Edwards radar bins (include recharge and artesian), stop carrying state
+5. point your makemap container to the newly created EAA S3.
+6. create hyetograph figure (png), containerize, and to docker-compose workflow for daily publish and daily PCC site
+7. add your dailystat, makemap, hyetograph container to the stg4-texas-docker repo after you monitor for a few days
+8. link this page with github actions to publish daily
+9. keep working on this website, a number of things have changed in your workflows
+10.build out the 2002-2025 mapper for internal use with EAA S3
+
 
 Big things:
 
@@ -23,5 +27,7 @@ Big things:
 5. Start in on sub-hourly MRMS processing
 
 
-
-
+DONE
+- Add daily images of ytd rainfall and 24hour rainfall to your S3 storage. (Found in stg4-edwards-daily-maps Bucket)
+- Add the historical data that you have on disk to your S3 bucket.  (2002-2024 added; in stg4-texas-24hr-historical Bucket)
+- Figure out how to cache your map tiles to speed up shiny app (Done, hardwired them in container)
