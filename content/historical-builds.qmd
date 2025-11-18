@@ -1,0 +1,7 @@
+---
+title: Historical Build
+---
+
+## Adding 2002-2024 records
+
+You have to check out https://github.com/cfurl/manual_stg4_proces/ to get the deets.  It's pretty well documented in there.  There is a pre-compiled version of wgrib2 in that repo.  I had wgrib.exe for grib1 files on my desktop.  Still had to do a little bulk rename outside of R.  Also, the S3 bucket got hairy so i made the archive its own bucket stg4-texas-24hr-historical.  I need to build out this section of the webpage because if would be nice to build this outside of Texas if need be one day.  

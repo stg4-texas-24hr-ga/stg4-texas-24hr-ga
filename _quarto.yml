@@ -42,6 +42,8 @@ website:
         text: Backend
       - href: content/frontend.qmd
         text: Frontend
+      - href: content/historical-builds.qmd
+        text: Historical Build
       - href: content/roadmap.qmd
         text: Roadmap
       - href: content/about.qmd
