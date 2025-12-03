@@ -4,11 +4,9 @@ subtitle: "A guide to near real-time automated Stage IV QPE processing and mappi
 page-layout: full
 ---
 
-![Precipitation from 7-13-2025 to 7-16-2025 across Edwards Aquifer Recharge Zone](img/rainfall_map2.png){fig-cap="24-hour Stage IV radar precipitation (in.)" width=70% fig-align="center"}
+This guide tracks the development of an automated radar precipitation processing system across the Edwards Aquifer Recharge Zone using the Stage IV QPE product from NCEP.  Following the framework described in this guide, users can automate collection of radar rainfall across a watershed that can be used to track droughts, forecast reservoir inflows, estimate soil moisture, force surface water models, etc.  
 
-Most radar-rainfall data are freely available from government agencies, yet the outputs are difficult difficult to process or tailor to local watersheds.  This guide  documents the development of an automated radar precipitation processing system across a watershed of interest using the Stage IV QPE product from NCEP.  Following the framework described in this guide, users can automate collection of radar rainfall across a watershed that can be used to track droughts, forecast reservoir inflows, estimate soil moisture, force surface water models, etc.  
+Rainfall maps and basin averaged accumulation values are published daily at approximately 8:00 AM CST (9:00 CDT) here - [Edwards Aquifer rainfall](https://0199e482-e2de-af9b-8add-6015f1008ca5.share.connect.posit.cloud/).
 
-The geographic region used in this guide is the Edwards Aquifer recharge zone located in south-central Texas.  Rainfall maps and basin averaged accumulation values are published daily at approximately 9:15 AM Central at this website: [Edwards Aquifer rainfall](https://0198a52d-8079-4ff0-9716-5f6e6c21fb79.share.connect.posit.cloud/).
-
-
+![Year-to-Date Precipitation Totals across Edwards Aquifer Recharge Zone](https://stg4-edwards-latest.s3.us-east-2.amazonaws.com/latest_ytd.png){fig-cap="24-hour Stage IV radar precipitation (in.)" width=100% fig-align="center"}
 
