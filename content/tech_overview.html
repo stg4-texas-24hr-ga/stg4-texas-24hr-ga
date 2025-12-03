@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>NOAA quarto simple - How it works</title>
+<title>NOAA quarto simple - Tech Overview</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -178,7 +178,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">How it works</h1>
+<h1 class="title">Tech Overview</h1>
 </div>
 
 
@@ -195,7 +195,8 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="high-level-workflow" class="level2">
 <h2 class="anchored" data-anchor-id="high-level-workflow">High-level workflow</h2>
-<p>Almost all of the code from downloading the data to publishing the website are written in R. Below are the main steps involved along with a description of the important technologies.</p>
+<p>The rainfall observations are brought to numerical and graphical format from the streaming repository to .html front end through a series of Docker Containers. The containers live on <a href="https://hub.docker.com/u/cfurl">cfurl Docker Hub</a> and orchestration is accomplished through Docker Compose. Radar file output and graphs are stored on AWS S3. The CI/CD pipeline runs daily using GitHub Actions.</p>
+<p>Below is a brief description of the daily workflow and and some highlights of the technologies used.</p>
 <ol type="1">
 <li>24-hour GRIB2 radar file available on NOMADS at 12:55 UTC.<br>
 </li>

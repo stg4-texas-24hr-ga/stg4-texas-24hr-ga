@@ -164,7 +164,6 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#additional-reading" id="toc-additional-reading" class="nav-link" data-scroll-target="#additional-reading">Additional reading</a></li>
   </ul>
 </nav>
     </div>
@@ -190,18 +189,16 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.</p>
-<p>The Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available in near real-time via NOMADS.</p>
+<p>The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses. Each of the individual RFCs blends WSR-88D radar with rain-gauge observations and are forecaster quality controlled—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations. The key distinction with Stage IV from precursor products is that it benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II streams.</p>
+<p>The Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available for the previous fourteen days in near real-time via NOMADS. A long-term repository is kept with UCAR and updated monthly.</p>
+<p><a href="https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/">Near real-time repository</a></p>
+<p><a href="https://rda.ucar.edu/datasets/d507005/dataaccess/">UCAR long-term repository</a></p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="content_img/conus.gif" class="img-fluid figure-img"></p>
 <figcaption class="figure-caption">Stg4 Conus output from NOMADS</figcaption>
 </figure>
 </div>
-</section>
-<section id="additional-reading" class="level2">
-<h2 class="anchored" data-anchor-id="additional-reading">Additional reading</h2>
-<p>Put your bibliography here</p>
 
 
 </section>

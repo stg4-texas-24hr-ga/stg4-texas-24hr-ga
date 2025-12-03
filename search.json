@@ -102,75 +102,68 @@
     "href": "content/stg4-product.html",
     "title": "Stage IV Precipitation",
     "section": "",
-    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.\nThe Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available in near real-time via NOMADS.\n\n\n\nStg4 Conus output from NOMADS"
+    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses. Each of the individual RFCs blends WSR-88D radar with rain-gauge observations and are forecaster quality controlled—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations. The key distinction with Stage IV from precursor products is that it benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II streams.\nThe Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available for the previous fourteen days in near real-time via NOMADS. A long-term repository is kept with UCAR and updated monthly.\nNear real-time repository\nUCAR long-term repository\n\n\n\nStg4 Conus output from NOMADS"
   },
   {
     "objectID": "content/stg4-product.html#overview",
     "href": "content/stg4-product.html#overview",
     "title": "Stage IV Precipitation",
     "section": "",
-    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses—each of which blends WSR-88D radar with rain-gauge observations and RFC forecaster quality control—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations, with the key distinction that Stage IV benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II.\nThe Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available in near real-time via NOMADS.\n\n\n\nStg4 Conus output from NOMADS"
-  },
-  {
-    "objectID": "content/stg4-product.html#additional-reading",
-    "href": "content/stg4-product.html#additional-reading",
-    "title": "Stage IV Precipitation",
-    "section": "Additional reading",
-    "text": "Additional reading\nPut your bibliography here"
+    "text": "The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses. Each of the individual RFCs blends WSR-88D radar with rain-gauge observations and are forecaster quality controlled—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations. The key distinction with Stage IV from precursor products is that it benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II streams.\nThe Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available for the previous fourteen days in near real-time via NOMADS. A long-term repository is kept with UCAR and updated monthly.\nNear real-time repository\nUCAR long-term repository\n\n\n\nStg4 Conus output from NOMADS"
   },
   {
     "objectID": "content/tech_overview.html",
     "href": "content/tech_overview.html",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "",
-    "text": "Almost all of the code from downloading the data to publishing the website are written in R. Below are the main steps involved along with a description of the important technologies.\n\n24-hour GRIB2 radar file available on NOMADS at 12:55 UTC.\n\nGitHub Actions cron job is triggered at ~ 13:15 to start a series of docker containers.\nContainer 1 - scrapes the GRIB2 file from NOMADS site.\nContainer 2 - GRIB2 taken out of binary and dumps .txt using wgrib2.exe.\nContainer 3 - tidy data, clip to AOI, and write .parquet files to AWS s3 bucket.\nContainer orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions.\nGitHub Actions cron job is triggered at ~ 13:30 prompting a republish of map through connect.posit.cloud.\nConnect.posit.cloud manages AWS credentials and publishes Rshiny app directly from Github frontend repo."
+    "text": "The rainfall observations are brought to numerical and graphical format from the streaming repository to .html front end through a series of Docker Containers. The containers live on cfurl Docker Hub and orchestration is accomplished through Docker Compose. Radar file output and graphs are stored on AWS S3. The CI/CD pipeline runs daily using GitHub Actions.\nBelow is a brief description of the daily workflow and and some highlights of the technologies used.\n\n24-hour GRIB2 radar file available on NOMADS at 12:55 UTC.\n\nGitHub Actions cron job is triggered at ~ 13:15 to start a series of docker containers.\nContainer 1 - scrapes the GRIB2 file from NOMADS site.\nContainer 2 - GRIB2 taken out of binary and dumps .txt using wgrib2.exe.\nContainer 3 - tidy data, clip to AOI, and write .parquet files to AWS s3 bucket.\nContainer orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions.\nGitHub Actions cron job is triggered at ~ 13:30 prompting a republish of map through connect.posit.cloud.\nConnect.posit.cloud manages AWS credentials and publishes Rshiny app directly from Github frontend repo."
   },
   {
     "objectID": "content/tech_overview.html#high-level-workflow",
     "href": "content/tech_overview.html#high-level-workflow",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "",
-    "text": "Almost all of the code from downloading the data to publishing the website are written in R. Below are the main steps involved along with a description of the important technologies.\n\n24-hour GRIB2 radar file available on NOMADS at 12:55 UTC.\n\nGitHub Actions cron job is triggered at ~ 13:15 to start a series of docker containers.\nContainer 1 - scrapes the GRIB2 file from NOMADS site.\nContainer 2 - GRIB2 taken out of binary and dumps .txt using wgrib2.exe.\nContainer 3 - tidy data, clip to AOI, and write .parquet files to AWS s3 bucket.\nContainer orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions.\nGitHub Actions cron job is triggered at ~ 13:30 prompting a republish of map through connect.posit.cloud.\nConnect.posit.cloud manages AWS credentials and publishes Rshiny app directly from Github frontend repo."
+    "text": "The rainfall observations are brought to numerical and graphical format from the streaming repository to .html front end through a series of Docker Containers. The containers live on cfurl Docker Hub and orchestration is accomplished through Docker Compose. Radar file output and graphs are stored on AWS S3. The CI/CD pipeline runs daily using GitHub Actions.\nBelow is a brief description of the daily workflow and and some highlights of the technologies used.\n\n24-hour GRIB2 radar file available on NOMADS at 12:55 UTC.\n\nGitHub Actions cron job is triggered at ~ 13:15 to start a series of docker containers.\nContainer 1 - scrapes the GRIB2 file from NOMADS site.\nContainer 2 - GRIB2 taken out of binary and dumps .txt using wgrib2.exe.\nContainer 3 - tidy data, clip to AOI, and write .parquet files to AWS s3 bucket.\nContainer orchestration done through Docker compose - AWS secrets injected at runtime with Github Actions.\nGitHub Actions cron job is triggered at ~ 13:30 prompting a republish of map through connect.posit.cloud.\nConnect.posit.cloud manages AWS credentials and publishes Rshiny app directly from Github frontend repo."
   },
   {
     "objectID": "content/tech_overview.html#docker",
     "href": "content/tech_overview.html#docker",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "Docker",
     "text": "Docker\nDocker is the most impactful tool I’ve adopted since learning to script. In short: you write code as usual, then package it into an image that includes the exact R runtime, system libraries, packages, and any required assets (e.g., shapefiles). That image is a portable, versioned artifact that runs the same everywhere. You push it to a registry (Docker Hub, AWS ECR, or a private repo), and whenever you need it, you pull the image and start a container—a clean, repeatable run every time. This kills environment drift and the “works on my machine” problem. Containers are lightweight, can be linked to form pipelines, and can mount volumes for persistent data. My images live here: https://hub.docker.com/repositories/cfurl. I learned from ‘Docker in a Month of Lunches’ by Elton Stoneman."
   },
   {
     "objectID": "content/tech_overview.html#wgrib2.exe",
     "href": "content/tech_overview.html#wgrib2.exe",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "wgrib2.exe",
     "text": "wgrib2.exe\nwgrib2.exe is a command-line utility for working with GRIB2 meteorological data. It reads GRIB2 files, inspects metadata, and produces concise inventories of the messages they contain. It is widely used to filter and extract variables (e.g., precipitation, temperature, wind), select time steps and vertical levels, and subset by geographic region. The tool can regrid or resample fields to different projections or resolutions, apply standard interpolations, and perform basic calculations. It also supports format conversion, writing outputs to human-readable text/CSV and, when built with the appropriate libraries, to NetCDF. Designed for speed and scripting, it scales well for batch processing and automated workflows on large archives. The “.exe” denotes the Windows build; equivalent functionality is available on Linux and macOS as wgrib2. It is maintained on github by NOAA here: https://github.com/NOAA-EMC/wgrib2/releases"
   },
   {
     "objectID": "content/tech_overview.html#parquet-and-apache-arrow",
     "href": "content/tech_overview.html#parquet-and-apache-arrow",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "Parquet and Apache Arrow",
     "text": "Parquet and Apache Arrow\nI picked up Apache Parquet and the Arrow R package at the Posit “Big Data with R” workshop, and they’ve been game-changers for radar data. Parquet is a columnar, compressed, splittable file format built for analytics: it stores columns together, so reads are fast and selective (you only scan the columns and row groups you need), and files are much smaller than CSV. Apache Arrow provides a columnar in-memory format and tooling that lets R (and other languages) scan Parquet lazily, push filters down to disk, and stream data in chunks—so you can work with datasets far larger than RAM instead of “loading everything, then filtering.” In practice, that means querying and summarizing hundreds of gigabytes on a laptop, especially when data are partitioned (e.g., by year/month/day) and stored locally or on S3. For analytics at scale, Parquet + Arrow has effectively replaced CSV for me: smaller, faster, and designed for selective reads—exactly what large radar archives demand."
   },
   {
     "objectID": "content/tech_overview.html#s3",
     "href": "content/tech_overview.html#s3",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "S3",
     "text": "S3\nAmazon S3 is durable, scalable object storage used to hold files of any size (e.g., Parquet) with high availability and pay-as-you-go pricing. It’s a common backbone for “data lake” workflows: tools read/write directly via s3://… paths, and in R, aws.s3 and Arrow support streaming/lazy access without local copies. Access control is handled with IAM; data governance via versioning, lifecycle policies, and server-side encryption. It’s low-maintenance, widely supported, and integrates cleanly with modern analytics stacks. I’ve used this tutorial regularly: https://www.gormanalysis.com/blog/connecting-to-aws-s3-with-r/"
   },
   {
     "objectID": "content/tech_overview.html#github-actions",
     "href": "content/tech_overview.html#github-actions",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "Github Actions",
     "text": "Github Actions\nGitHub Actions is GitHub’s built-in CI/CD platform that runs workflows on events (push, PR), schedules (cron), or manual dispatch. Workflows are defined as YAML files stored with your code, so versioning and reviews are straightforward. Runners can execute shell steps, build and run Docker containers (including docker-compose), and orchestrate multi-step jobs across OS targets. Sensitive values are injected at runtime via Repository/Environment Secrets (e.g., AWS credentials), avoiding hard-coding in images or source. Typical uses include scheduled data jobs, automated tests/linting, container builds and publishes, and static-site deploys (e.g., rebuilding documentation or a homepage on a timer). It’s a practical way to automate repeatable tasks directly from the repo without managing separate infrastructure—and can later hand off to a cloud-native backend if needed."
   },
   {
     "objectID": "content/tech_overview.html#posit.connect.cloud",
     "href": "content/tech_overview.html#posit.connect.cloud",
-    "title": "How it works",
+    "title": "Tech Overview",
     "section": "posit.connect.cloud",
     "text": "posit.connect.cloud\nI’ve spent less than a day building the rshiny app you see here. Posit Connect (cloud-managed) is a production publishing platform for R/Python: it hosts Shiny apps, Quarto/R Markdown sites, and APIs (e.g., Plumber) with HTTPS, auth, and versioned deploys. It handles builds and dependencies, environment variables/secrets, scheduled jobs (e.g., daily refresh), and integrates cleanly with Git/GitHub Actions for push-to-deploy. You get logs, usage metrics, access controls/SSO, and simple scaling (multiple processes/workers) without running servers. It’s a fast way to deliver interactive analytics now, with a clear path to containerized hosting on AWS later (ECS/Fargate, EKS, or EC2) using the same CI/secrets patterns."
   },
@@ -179,6 +172,6 @@
     "href": "index.html",
     "title": "Automated Radar Rainfall Mapping",
     "section": "",
-    "text": "Precipitation from 7-13-2025 to 7-16-2025 across Edwards Aquifer Recharge Zone\n\n\nMost radar-rainfall data are freely available from government agencies, yet the outputs are difficult difficult to process or tailor to local watersheds. This guide documents the development of an automated radar precipitation processing system across a watershed of interest using the Stage IV QPE product from NCEP. Following the framework described in this guide, users can automate collection of radar rainfall across a watershed that can be used to track droughts, forecast reservoir inflows, estimate soil moisture, force surface water models, etc.\nThe geographic region used in this guide is the Edwards Aquifer recharge zone located in south-central Texas. Rainfall maps and basin averaged accumulation values are published daily at approximately 9:15 AM Central at this website: Edwards Aquifer rainfall."
+    "text": "This guide tracks the development of an automated radar precipitation processing system across the Edwards Aquifer Recharge Zone using the Stage IV QPE product from NCEP. Following the framework described in this guide, users can automate collection of radar rainfall across a watershed that can be used to track droughts, forecast reservoir inflows, estimate soil moisture, force surface water models, etc.\nRainfall maps and basin averaged accumulation values are published daily at approximately 8:00 AM CST (9:00 CDT) here - Edwards Aquifer rainfall.\n\n\n\nYear-to-Date Precipitation Totals across Edwards Aquifer Recharge Zone"
   }
 ]
