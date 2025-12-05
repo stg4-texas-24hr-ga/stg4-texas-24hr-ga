@@ -2,7 +2,7 @@
 title: Stage IV Precipitation 
 ---
 
-## Overview
+## Stage4 Overview
 
 The NCEP “Stage IV” precipitation product is a national, multi-sensor quantitative precipitation estimate (QPE) created by mosaicking the 12 NWS River Forecast Centers’ hourly/6-hourly Stage III analyses.  Each of the individual RFCs blends WSR-88D radar with rain-gauge observations and are forecaster quality controlled—onto a common ~4 km HRAP grid for CONUS (with extensions for Alaska and Puerto Rico). It is delivered as hourly, 6-hourly, and 24-hour accumulations. The key distinction with Stage IV from precursor products is that it benefits from manual QC inherited from the RFC inputs, in contrast to automated-only Stage II streams. 
 
@@ -14,4 +14,28 @@ The Stage IV data is a combination of observations and radar calculated reflecti
 
 
 ![Stg4 Conus output from NOMADS](content_img/conus.gif){fig-cap="24-hour Stage IV radar precipitation" fig-align="center"}
+## Stage4 v PRISM v DAYMET4
 
+PRISM - Since January 2002, both the D1 and D2 daily/monthly precipitation versions use a combination of CAI (climatologically-aided interpolation of gauges) and Stage 4 RADAR interpolation in the central and eastern U.S. For earlier years, PRISM relies solely on station observations plud DEM and knowledge-based weighting, plus CAI tricks for daily/monthly. [PRISM NCAR Climate data guide](https://climatedataguide.ucar.edu/climate-data/prism-high-resolution-spatial-climate-data-united-states-maxmin-temp-dewpoint)
+
+Below are two storms from North Texas.  The first is from the pre-radar era (1998) and the second is with Stage4 integration (2012).  Note the difference in spatial complexity.
+
+```{r}
+#| fig-cap: "PRISM precipitation in North Texas 12-3-1998 (left) and 04-04-2012 (right)."
+#| layout-ncol: 2
+#| out-width: "48%"
+knitr::include_graphics(c(
+  "content_img/prism_crop_19981203.png",
+  "content_img/prism_crop_20120404.png"
+))
+```
+
+
+![PRISM precipitation North Texas 12-3-1998](content_img/prism_crop_19981203.png){fig-cap="PRISM precipitation North Texas 12-3-1998" fig-align="center"}
+
+![PRISM precipitation North Texas 04-04-2012](content_img/prism_crop_20120404.png){fig-cap="PRISM precipitation North Texas 4-4-2012" fig-align="center"}
+![PRISM gage locations](content_img/prism_only.png){fig-cap="PRISM precipitation gages" fig-align="center"}
+
+DAYMET4 - The core inputs for Daymet are daily precipitation and temperature from ground-based weather stations, primarily GHCN-Daily. The V4 Scientific Data paper notes that radar-based precipitation is used as an independent validation dataset, not as an input to the analysis. NCAR Climate data guide cites daily precipitation product not making use of potentially valuable information from radar networks as a key product limitation. [DAYMET NCAR Climate data guide](https://climatedataguide.ucar.edu/climate-data/daymet-daily-surface-weather-and-climatological-summaries)
+
+![DAYMET gage locations](content_img/daymet_only.png){fig-cap="PRISM precipitation gages" fig-align="center"}
