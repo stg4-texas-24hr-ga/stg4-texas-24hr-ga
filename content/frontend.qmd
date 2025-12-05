@@ -2,316 +2,73 @@
 title: Frontend
 ---
 
+The display and hosting of the radar fields has received comparatively little attention to the backend setup, but I wanted to separate it out in the documentation as I spend more time on it.
+
 ## The Details
 
 ### HRAP Grid
 
-I recall going through a lot of difficulty years ago trying to get the grid and bin mapping straightened away like I wanted it.  One of the problems is that the HRAP cell size changes with Latitude.  All of the answers lie in: "Coordinate Transformations for Using NEXRAD 
-data in GIS-based Hydrologic Modeling' by Reed and Maidment (1999).  I may have read this journal article more than any other article.  I was able to build a shapefile of the HRAP grid that I validated through published bin sizes (in Reed and Maidment) with this article and a pearl script from Stuart foote that wrote the corner intersecting vertices of the of the HRAP grid.  Complicated stuff.  I need to put the shapefile of the hrap grid on a github repo somewhere. I have .csv for state of Texas that associates lat-lon with HRAP Grid ID.  My shapefile holds HRAP Grid ID and Stg4 dumps center point (lan-lon) of radar bin. So, i can quickly map rainfall amount to HRAP Grid and my shapefile holds the size of the radar bin.   
+The most complicated part about getting the mapping correct is getting your grid straightened out. GRIB1 files contain 1121 x 881 (confirm this number) rows in a single column.  The 1121 is N(x) and the 881 is N(y).  Stuart Foote gave me a perl script circa 2013 that mapped the intersections of the grid cells.  I wrote a script to solve for the center of every bin.  One of the problems with making this into a shapefile is that the HRAP cell size changes with Latitude.  All of the answers lie in: "Coordinate Transformations for Using NEXRAD data in GIS-based Hydrologic Modeling' by Reed and Maidment (1999).  I may have read this journal article more than any other piece of paper.  I need to put my shapefile of the hrap grid on a github repo somewhere. I have .csv for state of Texas that associates lat-lon with HRAP Grid ID.  My shapefile holds HRAP Grid ID and Stg4 dumps center point (lan-lon) of radar bin. So, i can quickly map rainfall amount to HRAP Grid and my shapefile holds the size of the radar bin. I've got a bunch of interesting albeit dated literature on this topic.   
+
+The GRIB2 file prints a lat/lon with every row.  The centerpoints of the GRIB1 and GRIB2 radar bins appear to me to be about 50m off of each other.  Lin (personal communication) at NCEP, indicated that they used a slightly different earth radius in GRIB2.  Kris Landers (personal communcation) at WGRFC didn't know anything about the bins not aligning.  I dropped it because the spatial difference was so small.  
 
 The next time I work in a new geographic location I will document handling of the grid better. 
 
-### Rshiny App
+### Web display
 
-The map displaying rainfall across the basin is a simple Rshiny app (app.R) that is hosted on posit.connect.cloud.  This ggplot was written by Tanya (cfurl/stg4_edwards). 
+I originally built a small shiny app that communicated with the S3 bucket and plotted a radar map.  I hosted it on Posit Connect Cloud.  Posit.Connect.Cloud is nice for a few reasons 1). you can stand up a website, quarto build, or shiny app in a few minutes 2). It publishes directly from your github repository so you can develop in the same place you publish, and 3). You can add secrets to inject passwords at runtime - so you can interact with you AWS environment with very little pain.
+
+The PCC website doesn't allow for cron jobs to rebuild your website, but it republishes everytime there is a commit to the github repo hosting the page.  This is fine when your developing, but causes issue if you want regular republishing.  To work around this, my PCC website published daily by an 'empty' commit on a cron job via Github Actions.  PCC doesn't have the ability to schedule cron jobs so my workaround was to do a dummy commit with GA so that it publishes daily.  
+
+This setup worked but was too hacky plus the spin up of the website was really slow.  PCC had to go to AWS, make queries on the parquet, retrieve the data, then plot and bring to viewport.
+
+My workaround that appears more stable and much faster is to host the .png files I want to display in a dedicated public S3 bucket ( stg4-edwards-latest) that overwrites the latest daily file everytime it's published in the container sequence. The website is still Quarto doc hosted through Posit.Connect.Cloud, but the frontend couldn't be simpler - it just links to the stg4-edwards-latest bucket.  This way AWS does all the updating, the app is simple a pass through that adds a tabset and displays a url. It seems much faster. Yaml file and one of the tabset .qmd's pasted below.  I control how the link is cached during the write step to the S3 bucket in the map and hyetograph containers.
+
 
 ```{r}
 #| eval: false
 #| echo: true
 
-library("arrow")
-library("dplyr")
-library("lubridate")
-library("tidyr")
-library("readr")
-library("stringr")
-library("aws.s3")
-library("sf")
-library("ggspatial")
-library("ggplot2")
-library("prettymapr")
-library("shiny")
-#library("ggiraph")
+project:
+  type: website
 
-######################## Some S3 things #####################
-# remove this from container setup, this gives your local dev the AWS access
-#readRenviron("../.Renviron") # this is for keys one level up from root directory
-#readRenviron(".Renviron") # when it's in gitignore
+website:
+  title: "Stage4 EAA NEXRAD"
+  navbar:
+    left:
+      - text: "24-Hour"
+        href: recent-24.qmd
+      - text: "YTD"
+        href: year-to-date.qmd
+      - text: "Hyetograph"
+        href: hyet.qmd
 
-required <- c("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_DEFAULT_REGION")
-missing  <- required[Sys.getenv(required) == ""]
-if (length(missing)) {
-  stop("Missing env vars on Connect: ", paste(missing, collapse = ", "))
-}
+format:
+  html:
+    page-layout: full
+    css: [styles.css, styles-override.css]
+    toc: false
 
-# make sure you can connect to your bucket and open SubTreeFileSystem and identify path
-# then connect to the .parq files on the s3 storage
-bucket <- s3_bucket("stg4-texas-24hr")
-s3_path <- bucket$path("")
-stg4_24hr_texas_parq <- open_dataset(s3_path)
-
-############################ time stamps #############
-
-current_utc_date_time <- with_tz(Sys.time(), "UTC")
-current_central_date_time <- with_tz(Sys.time(), "America/Chicago")
-current_utc_time <- format(with_tz(Sys.time(), "UTC"), "%H:%M:%S")
-current_utc_date <- as_date(with_tz(Sys.time(), "UTC"))
-
-
-# parquet gets populated with most recent 24hr file at 13:45 UTC
-# new shiny page pushed to posit.cloud.connect at 13:57 UTC
-
-# This solves the problem of when the UTC time is in the current day, but the STG4 hasn't dopped yet, so the script is looking
-# for parquet files that haven't been populated yet. Until you reach 13:52 (when parquet is safely populated), it kicks you
-# back to yesterday
-#t1_offset <- case_when (current_utc_time >= "00:00" & current_utc_time <= "13:52" ~ -0, TRUE ~ 0)
-#t1_offset <- case_when (current_utc_time >= "00:00" & current_utc_time <= "13:52" ~ -1, TRUE ~ 0)
-#t2_offset <- case_when( current_utc_time >= "00:00" & current_utc_time <= "13:52" ~ -2, TRUE ~ -1)
-
-# Create exact timestamps (UTC) for noon on yesterday and today
-t1 <- as.POSIXct(paste(Sys.Date() - 0, "12:00:00"), tz = "UTC")  # today 0
-t2 <- as.POSIXct(paste(Sys.Date() - 1, "12:00:00"), tz = "UTC") # yesterday 1
-
-#create some timestamps for labels
-
-
-
-
-# This is where you query the parq files by time (not location yet)
-# carrying these commands around for whole state, could clip first
-
-time_check <- stg4_24hr_texas_parq |>
-  select(time)|>
-  filter (time %in% c(t1)) |>
-  collect()
-
-if (nrow(time_check) == 0) {
-  time_filter<-t2
-} else {
-  time_filter<-t1
-}
-
-d <- stg4_24hr_texas_parq |>
-    filter (time %in% c(time_filter)) |>
-    group_by (grib_id) %>%
-    summarize(
-      sum_rain = sum(rain_mm, na.rm=TRUE)) %>%
-    arrange(desc(sum_rain)) |>
-    collect()
-
-# Make local time labels for main title. Precipitation from xxxx - xxxx
-end_time_local <- with_tz(time_filter, "America/Chicago")
-begin_time_local <- end_time_local - days(1)
-
-
-# call the gis layers you want mapped
-map <- sf::read_sf("./gis/usgs_dissolved.shp")
-streams <- read_sf("./gis/streams_recharge.shp")
-lakes <- read_sf("./gis/reservoirs.shp")
-
-# this is where you subset the statewide set of bins by your shapefile area of interest
-map_rain <- map|>
-  left_join(d, by = "grib_id")|>
-  mutate(cubic_m_precip = bin_area * sum_rain * 0.001)|>
-  mutate(sum_rain_in = sum_rain/25.4)
-
-# Mapping function edited from Tanya's work
-plot_bin_map<-function(
-    title = 'Edwards Aquifer Recharge Zone',
-    subtitle= NA,
-    note_title = NA,
-    font = "Open Sans",
-    map_rain = NA,
-    map_streams = NA, 
-    map_lakes = NA,
-    pal_water='black',
-    pal_title='white',
-    pal_subtitle='white',
-    pal_outline='black',
-    pal_bin_outline='black',
-    pal_legend_text='white',
-    bin_alpha = 0.7,
-    map_type='cartodark'
-){
-  
-  bbox <- st_bbox(c(
-    xmin = -100.85,
-    ymin = 29.0, 
-    xmax = -97.75, 
-    ymax = 30.47
-  ), crs = 4326)
-  
-  coord_sys<-3857
-  
-  # Convert bbox to an sf object for ggplot compatibility
-  bbox_sf <- st_as_sfc(bbox)
-  bbox_transformed <- st_transform(bbox_sf, crs = coord_sys)
-  
-  outline <- map |> summarise(geometry = st_union(geometry)) |> st_cast("MULTILINESTRING")  
-  
-  title_pos <- st_sfc(st_point(c(-100.88, 30.43)), crs = 4326) |> 
-    st_transform(crs = 3857) |> 
-    st_coordinates() |> as.data.frame()
-  
-  subtitle_pos <- st_sfc(st_point(c(-100.88, 30.43 - 0.085)), crs = 4326) |> 
-    st_transform(crs = 3857) |> 
-    st_coordinates() |> as.data.frame()
-  
-  note_title_pos <- st_sfc(st_point(c(-100.88, 30.43 - 1.41)), crs = 4326) |> 
-    st_transform(crs = 3857) |> 
-    st_coordinates() |> as.data.frame()
-  
-  # --- Static legend settings (always show full range) ---
-  rain_breaks  <- c(0, 0.1, 0.25, 0.5, 1, 2, 3, 4, 6, 8, 10, 12)
-  rain_labels  <- c("0","0.1","0.25","0.5","1","2","3","4","6","8","10","12+")
-  rain_limits  <- c(0, 12)
-  
-  # --- Set 0 rainfall to NA for transparency ---
-  map_rain <- map_rain |>
-    mutate(fill_val = ifelse(sum_rain_in == 0, NA_real_, sum_rain_in))
-  
-  plot<-ggplot()+
-    annotation_map_tile(
-      type = map_type,  # Use the "Carto Light" basemap
-      zoom = 9  # Adjust zoom level as needed
-    )+
-    annotate(geom="text",x= title_pos$X,y=title_pos$Y,label=title,size=8,hjust=0, color = pal_title, family=font, fontface='bold')+
-    annotate(geom="text",x= subtitle_pos$X,y=subtitle_pos$Y,label=subtitle,size=5,hjust=0, color = pal_subtitle, family=font)+
-    annotate(geom="text",x=  note_title_pos$X,y= note_title_pos$Y,label=note_title,size=2,hjust=0, color = pal_subtitle, family=font)+
-    geom_sf(data = map_rain, mapping = aes(fill = fill_val), color = pal_bin_outline, alpha = bin_alpha, na.rm = FALSE) +
-    geom_sf(data = outline|>st_transform(crs = coord_sys), color = pal_outline, linewidth = 0.4) +  
-    geom_sf(data=map_lakes|>st_transform(crs = coord_sys), fill= pal_water, color= pal_water, linewidth = 0.2)+
-    geom_sf(data=map_streams|>st_transform(crs = coord_sys), color= pal_water)+
-    
-    scale_fill_stepsn(
-      colours = c("#82D3F0","#0826A2","#22FE05","#248418",
-                  "#F6FB07","#FFC348","#E01E17","#8C302C",
-                  "#CC17DA","#AE60B3","#FDF5FF"),
-      breaks    = rain_breaks,
-      limits    = rain_limits,
-      labels    = rain_labels,
-      oob       = scales::squish,
-      name      = "Rainfall (in)",
-      na.value  = NA  # keep transparency for NA (zero rainfall)
-    ) +
-    guides(
-      fill = guide_colorsteps(
-        title.position = "top",
-        title.vjust = 0.1,
-        show.limits = TRUE
-      )
-    )+
-    coord_sf(
-      xlim = c(st_bbox(bbox_transformed)["xmin"], st_bbox(bbox_transformed)["xmax"]),
-      ylim = c(st_bbox(bbox_transformed)["ymin"], st_bbox(bbox_transformed)["ymax"])
-    ) +
-    theme_void()+
-    theme(
-      text = element_text(family=font),
-      legend.position = "inside",
-      legend.position.inside = c(0.70,0.1),  
-      legend.direction = "horizontal", 
-      legend.margin = margin(t = 0, r = 10, b = 0, l = 10),
-      legend.title = element_text(size = 10, face='bold', color=pal_legend_text), 
-      legend.text = element_text(size = 9, color=pal_legend_text),  
-      legend.key.width = unit(2.5, "cm"), 
-      legend.key.height = unit(0.5, "cm")  
-    )
-  
-  return(plot)
-}
-
-
-
-#ui <- fluidPage(
-#  tags$head(tags$title("Rainfall Map")),
-#  fluidRow(
-#    column(
-#      width = 12,
-#      plotOutput("rain_map", height = "800px")
-#    )
-#  )
-#)
-
-
-ui <- fluidPage(
-  style = "padding:0; margin:0;",
-  tags$head(tags$title("Rainfall Map")),
-  plotOutput("rain_map", width = "100%", height = "100vh")
-)
-
-
-
-
-
-server <- function(input, output, session) {
-  output$rain_map <- renderPlot({
-                            plot_bin_map(title = 'Edwards Aquifer Recharge Zone',
-                            subtitle = paste("Precipitation from", format(begin_time_local, "%Y-%m-%d %H:%M %Z"), "to",format(end_time_local, "%Y-%m-%d %H:%M %Z")),
-                            note_title = paste("This map queried .parq at", format(current_utc_date_time, "%Y-%m-%d %H:%M %Z"), "and", format(current_central_date_time, "%Y-%m-%d %H:%M %Z")) ,
-                            font = "",
-                            map_rain = map_rain,
-                            map_streams = streams,
-                            map_lakes = lakes,
-                            #pal_water='#697984',
-                            pal_water = '#2C6690',
-                            pal_title='black',
-                            # pal_legend = 'YlOrRd',
-                            bin_alpha = 0.9,
-                            pal_subtitle='black',
-                            pal_outline="#697984",
-                            pal_bin_outline='white',
-                            pal_legend_text='black',
-                            map_type='cartolight')}, res = 144)  # crisp output
-}
-
-shinyApp(ui, server)
 
 ```
 
-### Posit.Connect.Cloud (PCC)
-
-Posit.Connect.Cloud is nice for a few reasons 1). you can stand up a website, quarto build, or shiny app in a few minutes 2). It publishes directly from your github repository so you can develop in the same place you publish, and 3). You can add secrets to inject passwords at runtime - so you can interact with you AWS environment with very little pain.
-
-In this case, I have a front end repository up at [/stg4-texas-24hr-frontend-actions](https://github.com/stg4-texas-24hr-ga/stg4-texas-24hr-frontend-actions) however my website is not publishing from there.  I am publishing from [cfurl/st4_front_query_map](https://github.com/cfurl/st4_front_query_map).  My posit.connect.cloud is associated with 'cfurl' repository and the third party app that links github-PCC can only be associated with one repo owner (in this case cfurl).  
-
-The PCC website republishes everytime there is a commit to the github repo.  This is fine when your developing, but causes issue if you want regular republishing.  To work around this, my PCC website publishes daily by an 'empty' commit on a cron job via Github Actions.  PCC doesn't have the ability to schedule cron jobs so my workaround was to do a dummy commit with GA so that it publishes daily.  
+and each tab just links to the S3 bucket (hyetograph tab):
 
 ```{r}
 #| eval: false
 #| echo: true
 
-name: Daily Connect redeploy nudge
+---
+format: html
+---
 
-on:
-  schedule:
-    # 8:45 AM America/Chicago (DST Mar–Oct)vv
-    - cron: "57 13 * 3-10 *"
-    # 8:45 AM America/Chicago (Standard Nov–Feb)
-    - cron: "57 14 * 11,12,1,2 *"
-  workflow_dispatch:
 
-jobs:
-  nudge:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-
-      - name: Configure git identity
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Create empty commit
-        run: |
-          git commit --allow-empty -m 'chore: daily redeploy nudge [skip ci]'
-
-      - name: Push to default branch
-        run: |
-          git push origin "HEAD:${{ github.event.repository.default_branch }}"
+![](https://stg4-edwards-latest.s3.us-east-2.amazonaws.com/latest_hyet.png){.map-full}
 ```
+
+
+
+
+
+
 
