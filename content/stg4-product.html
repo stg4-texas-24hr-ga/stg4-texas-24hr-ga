@@ -172,6 +172,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#stage4-overview" id="toc-stage4-overview" class="nav-link active" data-scroll-target="#stage4-overview">Stage4 Overview</a></li>
+  <li><a href="#stage4-v-prism-v-daymet4" id="toc-stage4-v-prism-v-daymet4" class="nav-link" data-scroll-target="#stage4-v-prism-v-daymet4">Stage4 v PRISM v DAYMET4</a></li>
   </ul>
 </nav>
     </div>
@@ -203,16 +204,24 @@ ul.task-list li input[type="checkbox"] {
 <p>The Stage IV data is a combination of observations and radar calculated reflectivity. Therefore the data combines the advantage of ground-truth provided by gauges with the spatially complete and high resolution radar data. Operationally, Stage IV is widely used for hydrologic verification, flood event forensics, and as precipitation forcing for models and water-resources studies. Data are distributed in GRIB (now GRIB2, after a 2020 format change) and the hourly product is available for the previous fourteen days in near real-time via NOMADS. A long-term repository is kept with UCAR and updated monthly.</p>
 <p><a href="https://nomads.ncep.noaa.gov/pub/data/nccf/com/pcpanl/prod/">Near real-time repository</a></p>
 <p><a href="https://rda.ucar.edu/datasets/d507005/dataaccess/">UCAR long-term repository</a></p>
-<p><img src="content_img/conus.gif" class="img-fluid quarto-figure quarto-figure-center" data-fig-cap="24-hour Stage IV radar precipitation" alt="Stg4 Conus output from NOMADS"> ## Stage4 v PRISM v DAYMET4</p>
-<p>PRISM - Since January 2002, both the D1 and D2 daily/monthly precipitation versions use a combination of CAI (climatologically-aided interpolation of gauges) and Stage 4 RADAR interpolation in the central and eastern U.S. For earlier years, PRISM relies solely on station observations plud DEM and knowledge-based weighting, plus CAI tricks for daily/monthly. <a href="https://climatedataguide.ucar.edu/climate-data/prism-high-resolution-spatial-climate-data-united-states-maxmin-temp-dewpoint">PRISM NCAR Climate data guide</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="content_img/conus.gif" class="img-fluid figure-img"></p>
+<figcaption>Stg4 Conus output from NOMADS</figcaption>
+</figure>
+</div>
+</section>
+<section id="stage4-v-prism-v-daymet4" class="level2">
+<h2 class="anchored" data-anchor-id="stage4-v-prism-v-daymet4">Stage4 v PRISM v DAYMET4</h2>
+<p>PRISM - Since January 2002, both the D1 and D2 daily/monthly precipitation versions use a combination of CAI (climatologically-aided interpolation of gauges) and Stage 4 RADAR interpolation in the central and eastern U.S. For earlier years, PRISM relies solely on station observations plud DEM and knowledge-based weighting, plus CAI tricks for daily/monthly. Available grid sizes are ~4km and ~800m. <a href="https://climatedataguide.ucar.edu/climate-data/prism-high-resolution-spatial-climate-data-united-states-maxmin-temp-dewpoint">PRISM NCAR Climate data guide</a></p>
 <p>Below are two storms from North Texas. The first is from the pre-radar era (1998) and the second is with Stage4 integration (2012). Note the difference in spatial complexity.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="content_img/prism_2col.png" class="img-fluid figure-img"></p>
-<figcaption>PRISM precipitation North Texas 12-3-1998</figcaption>
+<figcaption>PRISM precipitation in North Texas 12-3-1998 (left) and 04-04-2012 (right).</figcaption>
 </figure>
 </div>
-<p>DAYMET4 - The core inputs for Daymet are daily precipitation and temperature from ground-based weather stations, primarily GHCN-Daily. The V4 Scientific Data paper notes that radar-based precipitation is used as an independent validation dataset, not as an input to the analysis. NCAR Climate data guide cites daily precipitation product not making use of potentially valuable information from radar networks as a key product limitation. <a href="https://climatedataguide.ucar.edu/climate-data/daymet-daily-surface-weather-and-climatological-summaries">DAYMET NCAR Climate data guide</a></p>
+<p>DAYMET4 - The core inputs for Daymet are daily precipitation and temperature from ground-based weather stations, primarily GHCN-Daily. The V4 Scientific Data paper notes that radar-based precipitation is used as an independent validation dataset, not as an input to the analysis. NCAR Climate data guide cites daily precipitation product not making use of potentially valuable information from radar networks as a key product limitation. Grid size is 1km. <a href="https://climatedataguide.ucar.edu/climate-data/daymet-daily-surface-weather-and-climatological-summaries">DAYMET NCAR Climate data guide</a></p>
 <p>The figure below displays DAYMET and PRISM rain gage locations along with the Stage4 radar grid setup across the Edwards Aquifer Recharge zone. It was my understanding from the documentation that the gage list I pulled for PRISM corresponded with the 1998 figure shown above.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
