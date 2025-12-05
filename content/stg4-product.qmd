@@ -20,22 +20,12 @@ PRISM - Since January 2002, both the D1 and D2 daily/monthly precipitation versi
 
 Below are two storms from North Texas.  The first is from the pre-radar era (1998) and the second is with Stage4 integration (2012).  Note the difference in spatial complexity.
 
-```{r}
-#| fig-cap: "PRISM precipitation in North Texas 12-3-1998 (left) and 04-04-2012 (right)."
-#| layout-ncol: 2
-#| out-width: "48%"
-knitr::include_graphics(c(
-  "content_img/prism_crop_19981203.png",
-  "content_img/prism_crop_20120404.png"
-))
-```
+![PRISM precipitation North Texas 12-3-1998](content_img/prism_2col.png){fig-cap="PRISM precipitation in North Texas 12-3-1998 (left) and 04-04-2012 (right)." fig-align="center"}
 
 
-![PRISM precipitation North Texas 12-3-1998](content_img/prism_crop_19981203.png){fig-cap="PRISM precipitation North Texas 12-3-1998" fig-align="center"}
-
-![PRISM precipitation North Texas 04-04-2012](content_img/prism_crop_20120404.png){fig-cap="PRISM precipitation North Texas 4-4-2012" fig-align="center"}
-![PRISM gage locations](content_img/prism_only.png){fig-cap="PRISM precipitation gages" fig-align="center"}
 
 DAYMET4 - The core inputs for Daymet are daily precipitation and temperature from ground-based weather stations, primarily GHCN-Daily. The V4 Scientific Data paper notes that radar-based precipitation is used as an independent validation dataset, not as an input to the analysis. NCAR Climate data guide cites daily precipitation product not making use of potentially valuable information from radar networks as a key product limitation. [DAYMET NCAR Climate data guide](https://climatedataguide.ucar.edu/climate-data/daymet-daily-surface-weather-and-climatological-summaries)
 
-![DAYMET gage locations](content_img/daymet_only.png){fig-cap="PRISM precipitation gages" fig-align="center"}
+The figure below displays DAYMET and PRISM rain gage locations along with the Stage4 radar grid setup across the Edwards Aquifer Recharge zone.  It was my understanding from the documentation that the gage list I pulled for PRISM corresponded with the 1998 figure shown above.
+
+![DAYMET (left) and PRISM (right) rain gage locations displayed with the Stage4 radar grid across the Edwards Aquifer Recharge zone](content_img/prism_daymet_gages.png){fig-cap="PRISM precipitation gages" fig-align="center"}
