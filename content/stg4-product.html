@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -240,42 +206,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="content_img/conus.gif" class="img-fluid quarto-figure quarto-figure-center" data-fig-cap="24-hour Stage IV radar precipitation" alt="Stg4 Conus output from NOMADS"> ## Stage4 v PRISM v DAYMET4</p>
 <p>PRISM - Since January 2002, both the D1 and D2 daily/monthly precipitation versions use a combination of CAI (climatologically-aided interpolation of gauges) and Stage 4 RADAR interpolation in the central and eastern U.S. For earlier years, PRISM relies solely on station observations plud DEM and knowledge-based weighting, plus CAI tricks for daily/monthly. <a href="https://climatedataguide.ucar.edu/climate-data/prism-high-resolution-spatial-climate-data-united-states-maxmin-temp-dewpoint">PRISM NCAR Climate data guide</a></p>
 <p>Below are two storms from North Texas. The first is from the pre-radar era (1998) and the second is with Stage4 integration (2012). Note the difference in spatial complexity.</p>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="fu">c</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"content_img/prism_crop_19981203.png"</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"content_img/prism_crop_20120404.png"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="content_img/prism_crop_19981203.png" class="img-fluid figure-img" style="width:48.0%"></p>
-<figcaption>PRISM precipitation in North Texas 12-3-1998 (left) and 04-04-2012 (right).</figcaption>
-</figure>
-</div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="content_img/prism_crop_20120404.png" class="img-fluid figure-img" style="width:48.0%"></p>
-<figcaption>PRISM precipitation in North Texas 12-3-1998 (left) and 04-04-2012 (right).</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="content_img/prism_crop_19981203.png" class="img-fluid figure-img"></p>
+<p><img src="content_img/prism_2col.png" class="img-fluid figure-img"></p>
 <figcaption>PRISM precipitation North Texas 12-3-1998</figcaption>
 </figure>
 </div>
-<p><img src="content_img/prism_crop_20120404.png" class="img-fluid quarto-figure quarto-figure-center" data-fig-cap="PRISM precipitation North Texas 4-4-2012" alt="PRISM precipitation North Texas 04-04-2012"> <img src="content_img/prism_only.png" class="img-fluid quarto-figure quarto-figure-center" data-fig-cap="PRISM precipitation gages" alt="PRISM gage locations"></p>
 <p>DAYMET4 - The core inputs for Daymet are daily precipitation and temperature from ground-based weather stations, primarily GHCN-Daily. The V4 Scientific Data paper notes that radar-based precipitation is used as an independent validation dataset, not as an input to the analysis. NCAR Climate data guide cites daily precipitation product not making use of potentially valuable information from radar networks as a key product limitation. <a href="https://climatedataguide.ucar.edu/climate-data/daymet-daily-surface-weather-and-climatological-summaries">DAYMET NCAR Climate data guide</a></p>
+<p>The figure below displays DAYMET and PRISM rain gage locations along with the Stage4 radar grid setup across the Edwards Aquifer Recharge zone. It was my understanding from the documentation that the gage list I pulled for PRISM corresponded with the 1998 figure shown above.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="content_img/daymet_only.png" class="img-fluid figure-img"></p>
-<figcaption>DAYMET gage locations</figcaption>
+<p><img src="content_img/prism_daymet_gages.png" class="img-fluid figure-img"></p>
+<figcaption>DAYMET (left) and PRISM (right) rain gage locations displayed with the Stage4 radar grid across the Edwards Aquifer Recharge zone</figcaption>
 </figure>
 </div>
 
